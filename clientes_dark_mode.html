@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lista de Clientes - Dark Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#6565f1",
+          "background-light": "#f6f6f8",
+          "background-dark": "#0f172a",
+        },
+        fontFamily: {
+          "display": ["Inter", "sans-serif"]
+        },
+        borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+      },
+    },
+  }
+</script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex min-h-screen w-full flex-col md:flex-row bg-background-light dark:bg-background-dark overflow-x-hidden">
+<aside class="flex w-full md:w-64 flex-col justify-between bg-white dark:bg-[#1e293b] p-4 border-r border-slate-200 dark:border-slate-700">
+<div class="flex flex-col gap-4">
+<div class="flex gap-3 mb-6 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Avatar of Administrador" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC7fjD7mxPWYyU8LaVcd6eqnfSTUHE6WTo17TjJLyyAWp4mN85KdcF-ga34Xc7pS-JurORmLZJd6Ip2p-Hra5SdrVUG6Tuk0dJMtoOYMZZiScEsjPGW9tmOPzKjszr3KMTiGjuVhRVYG6ptuRQJ0CnF8COxHew3xkZgp1GOPV14e19LOk1-KM-lNy3fROwyRJPS5Da9GvrsOD0qYHlAuIFLRxLlfRtePXKf1U4eXg837rpeWPv8IXOzfzDV5Bkb_Cj_GLyNIE0d4hg");'></div>
+<div class="flex flex-col">
+<h1 class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Githa Clinic</h1>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-normal leading-normal">Administrador</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">home</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Visão Geral</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 dark:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-primary">group</span>
+<p class="text-primary text-sm font-medium leading-normal">Clientes</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">calendar_today</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Agenda</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">settings</span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Configurações</p>
+</a>
+</nav>
+</div>
+</aside>
+<main class="flex-1 flex flex-col p-4 md:p-8">
+<div class="flex flex-col max-w-6xl mx-auto w-full gap-6">
+<header class="flex flex-wrap justify-between items-center gap-4">
+<h2 class="text-slate-900 dark:text-slate-100 tracking-light text-2xl md:text-3xl font-bold leading-tight">Clientes</h2>
+<button class="flex items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-medium leading-normal hover:bg-primary/90 transition-colors shadow-sm">
+<span>+ Novo Cliente</span>
+</button>
+</header>
+<div class="flex flex-col gap-4 bg-white dark:bg-[#1e293b] p-4 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<div class="flex gap-3 flex-wrap items-center">
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Ativos</p>
+<span class="material-symbols-outlined text-slate-500 text-sm">expand_more</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-600">
+<span class="w-2 h-2 rounded-full bg-red-500"></span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Em Risco</p>
+<span class="material-symbols-outlined text-slate-500 text-sm">expand_more</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-slate-100 dark:bg-slate-800 px-3 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-600">
+<span class="w-2 h-2 rounded-full bg-slate-400"></span>
+<p class="text-slate-700 dark:text-slate-300 text-sm font-medium leading-normal">Inativos</p>
+<span class="material-symbols-outlined text-slate-500 text-sm">expand_more</span>
+</button>
+<div class="flex-1 min-w-[200px] ml-auto">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400">search</span>
+<input class="w-full h-10 pl-10 pr-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 text-sm focus:ring-2 focus:ring-primary focus:border-primary text-slate-900 dark:text-slate-100 placeholder-slate-400" placeholder="Buscar clientes..." type="text"/>
+</div>
+</div>
+</div>
+<div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700">
+<th class="px-4 py-3 text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal w-1/4">Nome</th>
+<th class="px-4 py-3 text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal w-1/6">Status</th>
+<th class="px-4 py-3 text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal w-1/4">Última Visita</th>
+<th class="px-4 py-3 text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal w-1/6 text-right">Ações</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors">
+<td class="px-4 py-3 text-slate-900 dark:text-slate-100 text-sm font-normal">João Silva</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
+                            Ativo
+                          </span>
+</td>
+<td class="px-4 py-3 text-slate-500 dark:text-slate-400 text-sm font-normal">10/10/2023</td>
+<td class="px-4 py-3 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 rounded-md hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600 dark:text-green-400 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 transition-colors" title="Deletar">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors dark:bg-red-900/5">
+<td class="px-4 py-3 text-slate-900 dark:text-slate-100 text-sm font-normal">Maria Santos</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/50">
+                            Em Risco
+                          </span>
+</td>
+<td class="px-4 py-3 text-slate-500 dark:text-slate-400 text-sm font-normal">15/09/2023</td>
+<td class="px-4 py-3 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 rounded-md hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600 dark:text-green-400 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 transition-colors" title="Deletar">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors">
+<td class="px-4 py-3 text-slate-900 dark:text-slate-100 text-sm font-normal">Pedro Alves</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                            Inativo
+                          </span>
+</td>
+<td class="px-4 py-3 text-slate-500 dark:text-slate-400 text-sm font-normal">01/01/2023</td>
+<td class="px-4 py-3 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 rounded-md hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600 dark:text-green-400 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 transition-colors" title="Deletar">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors">
+<td class="px-4 py-3 text-slate-900 dark:text-slate-100 text-sm font-normal">Ana Costa</td>
+<td class="px-4 py-3">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
+                            Ativo
+                          </span>
+</td>
+<td class="px-4 py-3 text-slate-500 dark:text-slate-400 text-sm font-normal">05/10/2023</td>
+<td class="px-4 py-3 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-1.5 rounded-md hover:bg-green-100 dark:hover:bg-green-900/30 text-green-600 dark:text-green-400 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 transition-colors" title="Deletar">
+<span class="material-symbols-outlined text-[20px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="flex items-center justify-between pt-4">
+<span class="text-sm text-slate-500 dark:text-slate-400">Mostrando 1 a 4 de 20 clientes</span>
+<div class="flex gap-1">
+<button class="flex size-8 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors" disabled="">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+<button class="flex size-8 items-center justify-center rounded-lg bg-primary text-white text-sm font-medium">1</button>
+<button class="flex size-8 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium transition-colors">2</button>
+<button class="flex size-8 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-medium transition-colors">3</button>
+<button class="flex size-8 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

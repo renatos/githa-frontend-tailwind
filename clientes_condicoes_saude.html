@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Modal Editar - Condições de Saúde</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6467f2",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101122",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display flex items-center justify-center min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-[#1e293b] group/design-root overflow-x-hidden shadow-2xl">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 md:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col w-full max-w-[960px] flex-1 bg-white dark:bg-[#0f172a] rounded-xl shadow-lg border border-slate-200 dark:border-slate-800 overflow-hidden relative">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-6 py-4 bg-slate-50 dark:bg-[#1e293b]">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px;">person_edit</span>
+<h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em]">Editar cliente</h2>
+</div>
+<button class="flex items-center justify-center rounded-full h-8 w-8 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<div class="overflow-x-auto border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0f172a]">
+<div class="flex px-6 gap-8 min-w-max">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 pb-3 pt-4 transition-colors" href="#">
+<p class="text-sm font-semibold leading-normal tracking-[0.015em]">Informações Pessoais</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 pb-3 pt-4 transition-colors" href="#">
+<p class="text-sm font-semibold leading-normal tracking-[0.015em]">Endereço</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-primary pb-3 pt-4" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Condições de Saúde</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 pb-3 pt-4 transition-colors" href="#">
+<p class="text-sm font-semibold leading-normal tracking-[0.015em]">Histórico Médico</p>
+</a>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<div class="flex items-center justify-between gap-4 p-4 rounded-lg bg-slate-50 dark:bg-[#1e293b]/50 border border-slate-100 dark:border-slate-800/50">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Está grávida ou amamentando?</p>
+<label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-primary transition-colors">
+<div class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+<div class="flex flex-col gap-3 p-4 rounded-lg bg-slate-50 dark:bg-[#1e293b]/50 border border-slate-100 dark:border-slate-800/50 border-l-4 border-l-primary">
+<div class="flex items-center justify-between gap-4">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Possui alergias conhecidas?</p>
+<label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-primary transition-colors">
+<div class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"></div>
+<input checked="" class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+<div class="mt-2 w-full">
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-md text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-1 focus:ring-primary border border-slate-300 dark:border-slate-700 bg-white dark:bg-[#0f172a] h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 text-sm font-normal leading-normal transition-shadow" placeholder="Descreva as alergias..." value="Amendoim, Penicilina"/>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4 p-4 rounded-lg bg-slate-50 dark:bg-[#1e293b]/50 border border-slate-100 dark:border-slate-800/50">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Possui diabetes?</p>
+<label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-primary transition-colors">
+<div class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center justify-between gap-4 p-4 rounded-lg bg-slate-50 dark:bg-[#1e293b]/50 border border-slate-100 dark:border-slate-800/50">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Faz uso de medicamentos contínuos?</p>
+<label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-primary transition-colors">
+<div class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center justify-between gap-4 p-4 rounded-lg bg-slate-50 dark:bg-[#1e293b]/50 border border-slate-100 dark:border-slate-800/50">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Usa ou usou ácidos no rosto recentemente?</p>
+<label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-primary transition-colors">
+<div class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+<div class="flex items-center justify-between gap-4 p-4 rounded-lg bg-slate-50 dark:bg-[#1e293b]/50 border border-slate-100 dark:border-slate-800/50">
+<p class="text-slate-900 dark:text-slate-100 text-base font-medium leading-normal">Passou por cirurgias recentemente?</p>
+<label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-primary transition-colors">
+<div class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"></div>
+<input class="invisible absolute" type="checkbox"/>
+</label>
+</div>
+</div>
+<footer class="flex items-center justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-[#1e293b]">
+<button class="px-5 py-2.5 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold text-sm hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                            Cancelar
+                        </button>
+<button class="px-5 py-2.5 rounded-lg bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm">
+                            Salvar
+                        </button>
+</footer>
+</div>
+</div>
+</div>
+</div>
+</body></html>

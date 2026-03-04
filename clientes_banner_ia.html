@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Banner Insights IA - Dark Mode</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b2bee",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101022",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-slate-900 font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-10 py-3 bg-white dark:bg-slate-900 sticky top-0 z-10">
+<div class="flex items-center gap-4">
+<div class="size-6 text-primary">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M12.0799 24L4 19.2479L9.95537 8.75216L18.04 13.4961L18.0446 4H29.9554L29.96 13.4961L38.0446 8.75216L44 19.2479L35.92 24L44 28.7521L38.0446 39.2479L29.96 34.5039L29.9554 44H18.0446L18.04 34.5039L9.95537 39.2479L4 28.7521L12.0799 24Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">ClinicApp</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<nav class="flex items-center gap-9">
+<a class="text-sm font-medium leading-normal text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors" href="#">Clientes</a>
+<a class="text-sm font-medium leading-normal text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors" href="#">Agenda</a>
+<a class="text-sm font-medium leading-normal text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-colors" href="#">Configurações</a>
+</nav>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary hover:bg-primary/90 text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors">
+<span class="truncate">Novo Cliente</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-slate-200 dark:border-slate-700" data-alt="User profile avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDmyfJyS5LDwQ1-tqdhvQ7QUWu8NXnTT9OOc4NQ1vUKs796f_411S9U0p0aKqxYDmYJa5kqX0-hxK3zcWPUJ9Rpbg_h0d5Fzm2o7Qqk9KvCOoBKKk_brq6Tpe_KdlF8Lwd8_divi3-tAjiz_87M8ppQg2TO1luII3YBqE7ZBcBRTCCOVNwYzgsTHmgBhu1EJRJPr4KaUPqG_19R8eaXdCV9Zf02biN6oGPVuDS8iovgvpyNvV8zgzbWxgDXEknFGNYG9WmPs7zLCMU");'></div>
+</div>
+</header>
+<main class="flex flex-1 justify-center py-8 px-4 sm:px-10 lg:px-40">
+<div class="layout-content-container flex flex-col w-full max-w-[960px] flex-1 gap-8">
+<!-- Title Section -->
+<div class="flex items-center justify-between">
+<h1 class="text-2xl font-bold tracking-tight">Clientes</h1>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="pl-10 pr-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent outline-none w-64 transition-all" placeholder="Buscar clientes..." type="text"/>
+</div>
+</div>
+<!-- AI Retention Analysis Banner -->
+<div class="relative overflow-hidden rounded-xl border border-indigo-500/30 bg-gradient-to-br from-indigo-900/30 to-slate-900 p-6 shadow-lg">
+<div class="absolute top-0 right-0 p-32 opacity-10 bg-gradient-to-bl from-primary to-transparent rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+<div class="flex flex-col gap-3 max-w-2xl">
+<div class="flex items-center gap-2">
+<span class="text-indigo-400 text-xl">✨</span>
+<h3 class="text-lg font-semibold text-white tracking-wide">Análise de Retenção IA</h3>
+</div>
+<p class="text-slate-300 text-base leading-relaxed">
+                                    Há <span class="font-semibold text-white">91</span> clientes em risco, sendo que <span class="font-bold text-white px-1 bg-white/10 rounded">ISABELA ABRAÃO (ID:562)</span> é o caso mais crítico com <span class="font-medium text-amber-400">65 dias</span> desde a última visita.
+                                </p>
+</div>
+<div class="flex-shrink-0 mt-4 md:mt-0 self-end md:self-auto">
+<a class="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 text-sm font-medium transition-colors group" href="#">
+                                    Ver todos na Central Githa AI 
+                                    <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- Client List Table -->
+<div class="px-0 py-3 @container">
+<div class="flex overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-800/50 shadow-sm">
+<table class="flex-1 w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/80 border-b border-slate-200 dark:border-slate-700">
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">ID</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Nome</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Última Visita</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+<th class="px-6 py-4 text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-200 dark:divide-slate-700/50">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">#562</td>
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">ISABELA ABRAÃO</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">65 dias atrás</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 border border-red-200 dark:border-red-800/50">
+                                                Crítico
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary/80 text-sm font-medium">Detalhes</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">#102</td>
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">JOÃO SILVA</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">40 dias atrás</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50">
+                                                Atenção
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary/80 text-sm font-medium">Detalhes</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">#345</td>
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">MARIA SANTOS</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">30 dias atrás</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800/50">
+                                                Atenção
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary/80 text-sm font-medium">Detalhes</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">#890</td>
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">PEDRO ALVES</td>
+<td class="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">25 dias atrás</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50">
+                                                Normal
+                                            </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-primary/80 text-sm font-medium">Detalhes</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="flex items-center justify-between mt-6">
+<p class="text-sm text-slate-500 dark:text-slate-400">Mostrando 1 a 4 de 248 clientes</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-400 cursor-not-allowed">Anterior</button>
+<button class="px-3 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Próximo</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+</body></html>

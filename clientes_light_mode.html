@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lista de Clientes</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#6565f1",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111122",
+            "slate-800": "#1e293b",
+            "slate-900": "#0f172a",
+            "slate-100": "#f1f5f9",
+            "slate-200": "#e2e8f0",
+            "slate-300": "#cbd5e1",
+            "slate-400": "#94a3b8",
+            "slate-500": "#64748b",
+            "slate-600": "#475569",
+            "slate-700": "#334155",
+            "indigo-500": "#6366f1",
+            "indigo-600": "#4f46e5",
+            "indigo-50": "#eef2ff",
+            "indigo-100": "#e0e7ff",
+            "green-50": "#f0fdf4",
+            "green-100": "#dcfce7",
+            "green-500": "#22c55e",
+            "green-800": "#166534",
+            "red-50": "#fef2f2",
+            "red-100": "#fee2e2",
+            "red-500": "#ef4444",
+            "red-800": "#991b1b",
+            "blue-50": "#eff6ff",
+            "blue-100": "#dbeafe",
+            "blue-500": "#3b82f6",
+            "blue-800": "#1e40af",
+            "neutral-50": "#fafafa",
+            "neutral-100": "#f5f5f5",
+            "neutral-500": "#737373",
+            "neutral-800": "#262626",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased min-h-screen flex">
+<aside class="w-64 bg-slate-800 dark:bg-slate-900 flex-shrink-0 flex flex-col justify-between p-4 border-r border-slate-700 dark:border-slate-800">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Clinic Logo Placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAX3akC0ISbkKg3ZQQdbb7JspgKNDUwYLLRgriR3j5-0-8o-Wd-SmEG5hB2yABxblAv5L8gpfAULPPiJjdGhmSk1pGJLcVNFBn0AyMuCbNdRnW7KY_W5JMDtWjymjWz6pAXntoqu-wYs6ORFT5k_ca91MeoJvTr1uc5fbNdo8Re6SQo8hPUOHmsEIP--ZfRHBvQ9ipMvDf4URfJYMhLmMF7QYIZU-kQ9JIfwg2vrrOlUukoL86EirvOk68rM-uPvgkVj3gQFs3CCrc");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-bold leading-normal">Githa Clinic</h1>
+<p class="text-slate-400 text-sm font-medium leading-normal">Administrador</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-indigo-600 text-white shadow-sm" href="#">
+<span class="material-symbols-outlined text-[24px]">group</span>
+<span class="text-sm font-medium">Clientes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">calendar_today</span>
+<span class="text-sm font-medium">Agendamentos</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="text-sm font-medium">Configurações</span>
+</a>
+</nav>
+</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-[24px]">logout</span>
+<span class="text-sm font-medium">Sair</span>
+</a>
+</aside>
+<main class="flex-1 flex flex-col overflow-hidden">
+<header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between z-10">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Clientes</h2>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">AI Powered</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400">Gerencie seus clientes de forma eficiente e inteligente.</p>
+</div>
+<div class="flex items-center gap-3">
+<button class="inline-flex items-center justify-center px-4 py-2 border border-slate-300 dark:border-slate-600 shadow-sm text-sm font-medium rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 hover:bg-slate-50 dark:hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+<span class="material-symbols-outlined text-[18px] mr-2">download</span>
+          Importar do Google
+        </button>
+<button class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+<span class="material-symbols-outlined text-[18px] mr-2">add</span>
+          Novo Cliente
+        </button>
+</div>
+</header>
+<div class="flex-1 overflow-auto p-6 flex flex-col gap-6">
+<div class="flex flex-wrap items-center gap-3">
+<button class="inline-flex items-center px-3 py-1.5 rounded-full border border-green-200 bg-green-50 text-green-800 dark:bg-green-900/30 dark:border-green-800 dark:text-green-300 text-sm font-medium hover:bg-green-100 dark:hover:bg-green-900/50 transition-colors">
+<span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+          VIP (12)
+        </button>
+<button class="inline-flex items-center px-3 py-1.5 rounded-full border border-red-200 bg-red-50 text-red-800 dark:bg-red-900/30 dark:border-red-800 dark:text-red-300 text-sm font-medium hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors">
+<span class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+          Em Risco (3)
+        </button>
+<button class="inline-flex items-center px-3 py-1.5 rounded-full border border-blue-200 bg-blue-50 text-blue-800 dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300 text-sm font-medium hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors">
+<span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+          Novo (8)
+        </button>
+<button class="inline-flex items-center px-3 py-1.5 rounded-full border border-slate-200 bg-slate-50 text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+<span class="w-2 h-2 rounded-full bg-slate-500 mr-2"></span>
+          Ativo (27)
+        </button>
+</div>
+<div class="bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden flex-1 flex flex-col">
+<div class="overflow-x-auto">
+<table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+<thead class="bg-slate-50 dark:bg-slate-900">
+<tr>
+<th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider w-16" scope="col">
+<div class="flex items-center justify-between">
+                    #
+                    <span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-slate-700 dark:hover:text-slate-200">swap_vert</span>
+</div>
+</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+                      Nome
+                      <span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-slate-700 dark:hover:text-slate-200">swap_vert</span>
+</div>
+<input class="block w-full text-xs rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-600 dark:text-white px-2 py-1" placeholder="Filtrar..." type="text"/>
+</div>
+</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+                      Email
+                      <span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-slate-700 dark:hover:text-slate-200">swap_vert</span>
+</div>
+<input class="block w-full text-xs rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-600 dark:text-white px-2 py-1" placeholder="Filtrar..." type="text"/>
+</div>
+</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+                      Telefone
+                      <span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-slate-700 dark:hover:text-slate-200">swap_vert</span>
+</div>
+<input class="block w-full text-xs rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-600 dark:text-white px-2 py-1" placeholder="Filtrar..." type="text"/>
+</div>
+</th>
+<th class="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider" scope="col">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between">
+                      Indicado Por
+                      <span class="material-symbols-outlined text-[16px] cursor-pointer hover:text-slate-700 dark:hover:text-slate-200">swap_vert</span>
+</div>
+<input class="block w-full text-xs rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-slate-800 dark:border-slate-600 dark:text-white px-2 py-1" placeholder="Filtrar..." type="text"/>
+</div>
+</th>
+<th class="px-6 py-3 text-right text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider w-24" scope="col">
+                  Ações
+                </th>
+</tr>
+</thead>
+<tbody class="bg-white dark:bg-slate-800 divide-y divide-slate-200 dark:divide-slate-700">
+<tr class="hover:bg-green-50/50 dark:hover:bg-green-900/10 transition-colors bg-green-50/30 dark:bg-green-900/5">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">1</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-8 w-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center font-bold text-xs dark:bg-green-900 dark:text-green-300">JS</div>
+<div class="ml-3">
+<div class="text-sm font-medium text-slate-900 dark:text-white">João Silva</div>
+<div class="text-xs text-green-600 dark:text-green-400 font-medium">VIP</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">joao@example.com</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">(11) 99999-9999</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">Maria Oliveira</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex justify-end gap-2">
+<button class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors" title="Excluir">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">2</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-8 w-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs dark:bg-slate-700 dark:text-slate-300">AS</div>
+<div class="ml-3">
+<div class="text-sm font-medium text-slate-900 dark:text-white">Ana Souza</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">Ativo</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">ana@example.com</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">(11) 88888-8888</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">Carlos Santos</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex justify-end gap-2">
+<button class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors" title="Excluir">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-red-50/50 dark:hover:bg-red-900/10 transition-colors bg-red-50/30 dark:bg-red-900/5">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">3</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-8 w-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center font-bold text-xs dark:bg-red-900 dark:text-red-300">CP</div>
+<div class="ml-3">
+<div class="text-sm font-medium text-slate-900 dark:text-white">Carlos Pereira</div>
+<div class="text-xs text-red-600 dark:text-red-400 font-medium">Em Risco</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">carlos@example.com</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">(11) 77777-7777</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">João Silva</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex justify-end gap-2">
+<button class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors" title="Excluir">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-colors bg-blue-50/30 dark:bg-blue-900/5">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">4</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-8 w-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs dark:bg-blue-900 dark:text-blue-300">MO</div>
+<div class="ml-3">
+<div class="text-sm font-medium text-slate-900 dark:text-white">Maria Oliveira</div>
+<div class="text-xs text-blue-600 dark:text-blue-400 font-medium">Novo</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">maria@example.com</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">(11) 66666-6666</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">Ana Souza</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex justify-end gap-2">
+<button class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors" title="Excluir">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-400">5</td>
+<td class="px-6 py-4 whitespace-nowrap">
+<div class="flex items-center">
+<div class="flex-shrink-0 h-8 w-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs dark:bg-slate-700 dark:text-slate-300">PC</div>
+<div class="ml-3">
+<div class="text-sm font-medium text-slate-900 dark:text-white">Pedro Costa</div>
+<div class="text-xs text-slate-500 dark:text-slate-400">Ativo</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">pedro@example.com</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">(11) 55555-5555</td>
+<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-500 dark:text-slate-300">Carlos Pereira</td>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+<div class="flex justify-end gap-2">
+<button class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition-colors" title="WhatsApp">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</button>
+<button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition-colors" title="Excluir">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="bg-white dark:bg-slate-800 px-4 py-3 border-t border-slate-200 dark:border-slate-700 flex items-center justify-between sm:px-6 mt-auto">
+<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+<div>
+<p class="text-sm text-slate-700 dark:text-slate-300">
+                Mostrando <span class="font-medium">1</span> a <span class="font-medium">5</span> de <span class="font-medium">50</span> registros
+              </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+<a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm font-medium text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-700" href="#">
+<span class="sr-only">Anterior</span>
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</a>
+<a aria-current="page" class="z-10 bg-indigo-50 dark:bg-indigo-900/50 border-indigo-500 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">
+                  1
+                </a>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-700 relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">
+                  2
+                </a>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-700 relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">
+                  3
+                </a>
+<span class="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm font-medium text-slate-700 dark:text-slate-400">
+                  ...
+                </span>
+<a class="bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-600 text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-700 relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">
+                  10
+                </a>
+<a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm font-medium text-slate-500 hover:bg-slate-50 dark:text-slate-400 dark:hover:bg-slate-700" href="#">
+<span class="sr-only">Próximo</span>
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

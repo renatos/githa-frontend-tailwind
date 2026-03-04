@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Editar Cliente - Dados Pessoais</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#3e3ef4",
+                        "background-light": "#f5f5f8",
+                        "background-dark": "#101022",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen relative flex items-center justify-center">
+<!-- Modal Backdrop -->
+<div class="absolute inset-0 bg-slate-900/50 flex items-center justify-center p-4">
+<!-- Modal Container -->
+<div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-[800px] flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+<div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">person_edit</span>
+<h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">Editar Cliente</h2>
+</div>
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg size-8 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</header>
+<!-- Scrollable Tabs -->
+<div class="overflow-x-auto border-b border-slate-200 dark:border-slate-700 custom-scrollbar">
+<div class="flex px-6 gap-8 min-w-max">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-3 pt-4 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Dados Gerais</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-primary text-slate-900 dark:text-slate-100 pb-3 pt-4" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Dados Pessoais</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-3 pt-4 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Condições de Saúde</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-3 pt-4 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Hábitos</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-3 pt-4 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Anamneses</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 pb-3 pt-4 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Histórico</p>
+</a>
+</div>
+</div>
+<!-- Content Area -->
+<div class="overflow-y-auto p-6 flex-1 space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Gênero -->
+<label class="flex flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">Gênero</p>
+<select class="form-select flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 py-3 text-base font-normal leading-normal transition-colors">
+<option selected="" value="feminino">Feminino</option>
+<option value="masculino">Masculino</option>
+<option value="outro">Outro</option>
+<option value="nao_informar">Prefiro não informar</option>
+</select>
+</label>
+<!-- Objetivo Principal -->
+<label class="flex flex-col">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">Objetivo Principal</p>
+<select class="form-select flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-primary focus:ring-1 focus:ring-primary h-12 px-4 py-3 text-base font-normal leading-normal transition-colors">
+<option selected="" value="limpeza_pele">Limpeza de Pele</option>
+<option value="rejuvenescimento">Rejuvenescimento</option>
+<option value="tratamento_acne">Tratamento de Acne</option>
+<option value="hidratacao">Hidratação Profunda</option>
+</select>
+</label>
+<!-- Endereço Completo -->
+<label class="flex flex-col md:col-span-2">
+<p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">Endereço Completo</p>
+<input class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-primary focus:ring-1 focus:ring-primary h-12 placeholder:text-slate-400 px-4 py-3 text-base font-normal leading-normal transition-colors" placeholder="Insira o endereço completo" value="Rua das Flores, 123, Apto 45 - Centro, São Paulo - SP"/>
+</label>
+</div>
+</div>
+<!-- Footer -->
+<footer class="flex items-center justify-end gap-3 border-t border-slate-200 dark:border-slate-700 px-6 py-4 bg-slate-50 dark:bg-slate-800/50">
+<button class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-500">
+                    Cancelar
+                </button>
+<button class="px-5 py-2.5 rounded-lg text-white bg-primary hover:bg-primary/90 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-slate-800">
+                    Salvar
+                </button>
+</footer>
+</div>
+</div>
+</body></html>

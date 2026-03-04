@@ -1,0 +1,191 @@
+<template>
+  <div class="account-group-list">
+    <div class="header-actions">
+      <h2>Grupos de Contas</h2>
+      <button class="btn btn-primary" @click="openForm()">
+        + Novo Grupo
+      </button>
+    </div>
+
+    <GenericTable
+      ref="tableRef"
+      :columns="columns"
+      :fetch-data="fetchDataAdapter"
+      @row-click="openForm"
+    >
+      <template #cell-nature="{ value }">
+        <span :class="['nature-badge', value.toLowerCase()]">
+          {{ value === 'INCOME' ? 'Receita' : 'Despesa' }}
+        </span>
+      </template>
+
+      <template #cell-active="{ value }">
+        <span :class="['status-badge', value ? 'active' : 'inactive']">
+          {{ value ? 'Ativo' : 'Inativo' }}
+        </span>
+      </template>
+
+      <template #actions="{ item }">
+        <div class="actions-group">
+          <button class="btn-icon delete" @click.stop="confirmDelete(item)">✕</button>
+        </div>
+      </template>
+    </GenericTable>
+
+    <AccountGroupForm
+      v-if="showForm"
+      :account-group="editingItem"
+      @close="closeForm"
+      @save="onSave"
+    />
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import GenericTable from '@/components/common/GenericTable.vue';
+import AccountGroupForm from '@/components/financial/AccountGroupForm.vue';
+import financialService from '@/services/financialService';
+
+const tableRef = ref(null);
+const showForm = ref(false);
+const editingItem = ref({});
+
+const columns = [
+  { key: 'id', label: '#', width: '50px', sortable: true },
+  { key: 'name', label: 'Nome', sortable: true, filterable: true },
+  { key: 'nature', label: 'Natureza', sortable: true, align: 'center' },
+  { key: 'active', label: 'Status', sortable: true, align: 'center' },
+];
+
+const fetchDataAdapter = async (params) => {
+  const response = await financialService.getAccountGroups();
+  const allData = response.data;
+
+  let filteredData = allData;
+  if (params.filters && params.filters.name) {
+    const searchTerm = params.filters.name.toLowerCase();
+    filteredData = allData.filter(item =>
+      item.name.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  if (params.sort) {
+    const [field, direction] = params.sort.split(',');
+    filteredData.sort((a, b) => {
+      const aVal = a[field];
+      const bVal = b[field];
+      const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+      return direction === 'desc' ? -comparison : comparison;
+    });
+  }
+
+  const start = params.page * params.size;
+  const end = start + params.size;
+  return {
+    content: filteredData.slice(start, end),
+    number: params.page,
+    size: params.size,
+    totalElements: filteredData.length
+  };
+};
+
+const openForm = (item = {}) => {
+  editingItem.value = { ...item };
+  showForm.value = true;
+};
+
+const closeForm = () => {
+  showForm.value = false;
+  editingItem.value = {};
+};
+
+const onSave = () => {
+  closeForm();
+  tableRef.value?.loadData();
+};
+
+const confirmDelete = async (group) => {
+  if (confirm(`Tem certeza que deseja excluir o grupo "${group.name}"?`)) {
+    try {
+      await financialService.deleteAccountGroup(group.id);
+      tableRef.value?.loadData();
+    } catch (error) {
+      console.error('Error deleting account group:', error);
+      alert('Erro ao excluir grupo. Verifique se existem transações vinculadas.');
+    }
+  }
+};
+</script>
+
+<style scoped>
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.actions-group {
+  display: flex;
+  gap: var(--spacing-xs);
+  justify-content: center;
+}
+
+.btn-icon {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  padding: 0.25rem 0.6rem;
+  transition: all 0.2s;
+  color: var(--color-text-muted);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.btn-icon:hover {
+  background-color: var(--color-bg-body);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.btn-icon.delete {
+    color: var(--color-error, #ef4444);
+    border-color: var(--color-error, #ef4444);
+    opacity: 0.8;
+}
+
+.btn-icon.delete:hover {
+  background-color: #fee2e2;
+  border-color: #ef4444;
+  color: #ef4444;
+  opacity: 1;
+}
+
+.status-badge, .nature-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-badge.active {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.inactive {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
+.nature-badge.income {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.nature-badge.expense {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+</style>

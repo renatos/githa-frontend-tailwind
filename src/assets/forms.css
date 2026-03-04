@@ -1,0 +1,153 @@
+/* Shared Form Styles */
+.form-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.form-group.check {
+    flex-direction: row;
+    align-items: center;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-main);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.form-control {
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+    background-color: var(--color-bg-card);
+    color: var(--color-text-main);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px var(--color-primary-soft);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-main);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-bg-body);
+}
+
+/* Grid helpers for forms */
+.row {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.col {
+    flex: 1;
+}
+
+/* Fix for select dropdowns in dark mode */
+select option {
+    background-color: var(--color-bg-card);
+    color: var(--color-text-main);
+}
+
+/* Ensure select itself has proper colors */
+select {
+    background-color: var(--color-bg-card) !important;
+    color: var(--color-text-main) !important;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+}
+
+/* Toggle Switch Styles */
+.toggle-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.toggle-group label {
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+.toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+.toggle-switch label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+    margin: 0;
+}
+
+.toggle-switch label:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.toggle-switch input:checked+label {
+    background-color: var(--color-primary);
+}
+
+.toggle-switch input:focus+label {
+    box-shadow: 0 0 1px var(--color-primary);
+}
+
+.toggle-switch input:checked+label:before {
+    transform: translateX(20px);
+}
+
+.toggle-switch input:disabled+label {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
