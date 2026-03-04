@@ -1,23 +1,33 @@
 <template>
-  <div class="client-list">
-    <div class="header-actions">
-      <div class="flex align-items-center gap-3">
-        <h2 class="m-0">Clientes</h2>
+  <div class="client-list p-4 md:p-6 flex flex-col gap-6">
+    <header class="bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-200 dark:border-slate-700 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10">
+      <div class="flex flex-col gap-1">
+        <div class="flex items-center gap-2">
+          <h2 class="text-2xl font-bold text-slate-900 dark:text-white m-0">Clientes</h2>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">AI Powered</span>
+        </div>
+        <p class="text-sm text-slate-500 dark:text-slate-400 m-0 mt-1">Gerencie seus clientes de forma eficiente e inteligente.</p>
       </div>
-      <div class="header-buttons">
-          <button class="btn btn-secondary" @click="showImportModal = true">
-            Importar do Google
-          </button>
-          <button class="btn btn-primary" @click="$emit('new')">
-            + Novo Cliente
-          </button>
+      <div class="flex items-center gap-3">
+        <button 
+          @click="showImportModal = true"
+          class="inline-flex items-center justify-center px-4 py-2 border border-slate-300 dark:border-slate-600 shadow-sm text-sm font-medium rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+          <span class="material-symbols-outlined text-[18px] mr-2">download</span>
+          Importar do Google
+        </button>
+        <button 
+          @click="$emit('new')"
+          class="inline-flex items-center justify-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+          <span class="material-symbols-outlined text-[18px] mr-2">add</span>
+          Novo Cliente
+        </button>
       </div>
-    </div>
+    </header>
 
     <!-- AI Retention Analysis Banner -->
     <AiInsightsBanner />
 
-    <div class="flex flex-wrap items-center gap-3 mb-4">
+    <div class="flex flex-wrap items-center gap-3">
       <button 
         class="inline-flex items-center px-3 py-1.5 rounded-full border text-sm font-medium transition-colors"
         :class="[
