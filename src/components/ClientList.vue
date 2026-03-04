@@ -98,9 +98,15 @@
       ref="tableRef"
       :columns="columns"
       :fetch-data="fetchClientsAdapter"
-      :row-class="getRowClass"
       @row-click="(item) => $emit('edit', item)"
     >
+      <template #cell-status="{ item }">
+        <span v-if="item.status" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium"
+              :class="getStatusBadgeClass(item.status)">
+          <span class="w-1.5 h-1.5 rounded-full" :class="getStatusDotClass(item.status)"></span>
+          {{ getStatusLabel(item.status) }}
+        </span>
+      </template>
       <template #cell-phone="{ item }">
         {{ formatPhone(item.phone) }}
       </template>
@@ -161,7 +167,7 @@ const handleImportGoogle = async (clients) => {
 const columns = [
   { key: 'id', label: '#', width: '50px', sortable: true },
   { key: 'name', label: 'Nome', sortable: true, filterable: true },
-  { key: 'email', label: 'Email', sortable: true, filterable: true },
+  { key: 'status', label: 'Status', sortable: true, width: '140px' },
   { key: 'phone', label: 'Telefone', sortable: false, filterable: true },
   { key: 'referredByName', label: 'Indicado Por', sortable: false },
 ];
@@ -221,10 +227,32 @@ const refresh = () => {
   tableRef.value?.loadData();
 };
 
-const getRowClass = (item) => {
-  if (!item.status) return '';
-  // status is likely UpperCase from backend (VIP), css uses lower (vip)
-  return `client-row-${item.status.toLowerCase()}`;
+const getStatusBadgeClass = (status) => {
+  const map = {
+    VIP: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300',
+    AT_RISK: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300',
+    NEW: 'bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300',
+  };
+  return map[status] || 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
+};
+
+const getStatusDotClass = (status) => {
+  const map = {
+    VIP: 'bg-emerald-500',
+    AT_RISK: 'bg-red-500',
+    NEW: 'bg-sky-500',
+  };
+  return map[status] || 'bg-slate-400';
+};
+
+const getStatusLabel = (status) => {
+  const map = {
+    VIP: 'VIP',
+    AT_RISK: 'Em Risco',
+    NEW: 'Novo',
+    ACTIVE: 'Ativo',
+  };
+  return map[status] || status;
 };
 
 const getWhatsappLink = (client) => {
@@ -237,30 +265,7 @@ defineExpose({ refresh });
 </script>
 
 <style>
-/* Global styles for row coloring, as GenericTable renders tr */
-.client-row-vip {
-  background-color: var(--color-status-vip-bg);
-  color: var(--color-status-vip-text);
-}
-.client-row-vip:hover {
-  background-color: #bbf7d0 !important; /* Slightly darker green on hover */
-}
-
-.client-row-at_risk {
-  background-color: var(--color-status-risk-bg);
-  color: var(--color-status-risk-text);
-}
-.client-row-at_risk:hover {
-  background-color: #fecaca !important;
-}
-
-.client-row-new {
-  background-color: var(--color-status-new-bg);
-  color: var(--color-status-new-text);
-}
-.client-row-new:hover {
-  background-color: #bae6fd !important;
-}
+/* No row-level coloring needed — status is shown via badges */
 </style>
 
 <style scoped>

@@ -19,14 +19,21 @@
           <div class="border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
             <div class="flex flex-wrap px-4 md:px-6 gap-1 md:gap-6">
               <a v-for="(tab, index) in tabs" :key="index"
-                 @click.prevent="activeTab = index"
+                 @click.prevent="!tab.disabled && (activeTab = index)"
+                 :title="tab.disabled ? 'Salve o cliente primeiro para acessar esta aba' : ''"
                  :class="[
-                   activeTab === index 
-                     ? 'border-b-indigo-600 text-slate-900 dark:text-slate-100' 
-                     : 'border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300',
-                   'flex items-center justify-center border-b-[3px] px-3 md:px-1 pb-3 pt-4 transition-colors cursor-pointer whitespace-nowrap'
+                   tab.disabled
+                     ? 'border-b-transparent text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-50'
+                     : activeTab === index 
+                       ? 'border-b-indigo-600 text-slate-900 dark:text-slate-100' 
+                       : 'border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300',
+                   'flex items-center justify-center border-b-[3px] px-3 md:px-1 pb-3 pt-4 transition-colors whitespace-nowrap',
+                   tab.disabled ? '' : 'cursor-pointer'
                  ]">
-                <p class="text-xs md:text-sm font-bold leading-normal tracking-[0.015em]">{{ tab.label }}</p>
+                <p class="text-xs md:text-sm font-bold leading-normal tracking-[0.015em] flex items-center gap-1">
+                  {{ tab.label }}
+                  <span v-if="tab.disabled" class="material-symbols-outlined text-[14px]">lock</span>
+                </p>
               </a>
             </div>
           </div>
@@ -325,18 +332,15 @@ import {formatPhone} from '../utils/formatters';
 const activeTab = ref(0);
 
 const tabs = computed(() => {
-  const baseTabs = [
+  const isNew = !form.value.id;
+  return [
     { label: 'Dados Gerais' },
     { label: 'Dados Pessoais' },
     { label: 'Condições de Saúde' },
-    { label: 'Hábitos' }
+    { label: 'Hábitos' },
+    { label: 'Anamneses', disabled: isNew },
+    { label: 'Histórico', disabled: isNew }
   ];
-  
-  if (form.value.id) {
-    baseTabs.push({ label: 'Anamneses' });
-    baseTabs.push({ label: 'Histórico' });
-  }
-  return baseTabs;
 });
 
 const props = defineProps({
