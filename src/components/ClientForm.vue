@@ -2,12 +2,32 @@
   <div class="fixed inset-0 z-[1050] bg-slate-900/50 flex items-center justify-center p-4 backdrop-blur-sm" @click.self="$emit('close')">
     <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-[800px] flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700">
       
-      <header class="flex items-center justify-between whitespace-nowrap border-b border-slate-200 dark:border-slate-700 px-6 py-4">
-        <div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
-          <span class="material-symbols-outlined text-[24px]">person_edit</span>
-          <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] m-0">{{ form.id ? 'Editar Cliente' : 'Novo Cliente' }}</h2>
+      <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+        <div class="flex items-center gap-4 min-w-0">
+          <span class="material-symbols-outlined text-[24px] shrink-0"
+                :class="form.personalData?.gender === 'FEMALE' ? 'text-pink-400' : form.personalData?.gender === 'MALE' ? 'text-blue-400' : 'text-slate-900 dark:text-slate-100'">person_edit</span>
+          <div class="min-w-0">
+            <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] m-0 text-slate-900 dark:text-slate-100 truncate">
+              {{ form.id ? firstName : 'Novo Cliente' }}
+            </h2>
+            <div v-if="form.id" class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
+              <span v-if="clientAge" class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">cake</span>
+                {{ clientAge }} anos
+              </span>
+              <span v-if="clientSince" class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">calendar_month</span>
+                Cliente desde {{ clientSince }}
+              </span>
+              <span v-if="form.status" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide"
+                    :class="headerStatusClass">
+                <span class="w-1.5 h-1.5 rounded-full" :class="headerStatusDotClass"></span>
+                {{ headerStatusLabel }}
+              </span>
+            </div>
+          </div>
         </div>
-        <button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg w-8 h-8 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors" @click="$emit('close')">
+        <button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg w-8 h-8 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors shrink-0" @click="$emit('close')">
           <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </header>
@@ -354,6 +374,50 @@ const emit = defineEmits(['close', 'save']);
 useModal(emit);
 
 const maxDate = new Date().toISOString().split('T')[0];
+
+const firstName = computed(() => {
+  if (!form.value.name) return 'Editar Cliente';
+  return form.value.name.split(' ')[0];
+});
+
+const clientAge = computed(() => {
+  if (!form.value.birthday) return null;
+  const birth = new Date(form.value.birthday);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age > 0 ? age : null;
+});
+
+const clientSince = computed(() => {
+  const d = form.value.createdAt;
+  if (!d) return null;
+  const date = new Date(d);
+  const months = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  return `${months[date.getMonth()]}/${date.getFullYear()}`;
+});
+
+const headerStatusClass = computed(() => {
+  const map = {
+    VIP: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300',
+    AT_RISK: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300',
+    NEW: 'bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300',
+  };
+  return map[form.value.status] || 'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300';
+});
+
+const headerStatusDotClass = computed(() => {
+  const map = { VIP: 'bg-emerald-500', AT_RISK: 'bg-red-500', NEW: 'bg-sky-500' };
+  return map[form.value.status] || 'bg-slate-400';
+});
+
+const headerStatusLabel = computed(() => {
+  const map = { VIP: 'VIP', AT_RISK: 'Em Risco', NEW: 'Novo', ACTIVE: 'Ativo' };
+  return map[form.value.status] || form.value.status;
+});
 
 const form = ref({
   id: null,
