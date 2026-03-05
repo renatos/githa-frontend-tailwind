@@ -47,14 +47,14 @@
           <td
               v-for="col in columns"
               :key="col.key"
-              class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 dark:text-slate-300"
+              class="px-6 py-2.5 whitespace-nowrap text-sm text-slate-600 dark:text-slate-300"
               :style="{ textAlign: col.align || 'left' }"
           >
             <slot :item="item" :name="'cell-' + col.key" :value="item[col.key]">
               <span :class="{'font-mono': col.monospace}">{{ item[col.key] }}</span>
             </slot>
           </td>
-          <td v-if="$slots.actions" class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" @click.stop>
+          <td v-if="$slots.actions" class="px-6 py-2.5 whitespace-nowrap text-right text-sm font-medium" @click.stop>
             <slot :item="item" name="actions"></slot>
           </td>
         </tr>
