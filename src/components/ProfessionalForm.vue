@@ -26,7 +26,7 @@
 
               <label class="flex flex-col">
                 <p class="text-slate-900 dark:text-slate-100 text-sm font-medium pb-2">Telefone</p>
-                <input v-model="form.phone" class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-11 px-4 text-base transition-colors" type="tel" />
+                <input v-model="form.phone" class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-11 px-4 text-base transition-colors" type="tel" maxlength="15" placeholder="(DD) 99999-9999" @input="onPhoneInput" />
               </label>
 
               <label class="flex flex-col">
@@ -34,7 +34,8 @@
                 <input v-model="form.commissionRate" class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-11 px-4 text-base transition-colors" max="100" min="0" step="0.01" type="number" />
               </label>
 
-              <div class="flex items-center justify-between gap-4 p-4 rounded-lg bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+              <div class="flex items-center justify-between gap-4 p-4 rounded-lg transition-colors border"
+                   :class="form.active ? 'bg-indigo-50/50 dark:bg-indigo-900/20 border-indigo-300 dark:border-indigo-700' : 'bg-slate-100/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'">
                 <p class="text-slate-900 dark:text-slate-100 text-sm font-medium">Ativo</p>
                 <label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-indigo-600 transition-colors">
                   <div class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"></div>
@@ -64,6 +65,7 @@ import {ref, defineProps, defineEmits, onMounted} from 'vue';
 import {professionalService} from '../services/professionalService';
 import {useModal} from '../composables/useModal';
 import {useEscapeKey} from '../composables/useEscapeKey';
+import {formatPhone} from '../utils/formatters';
 
 const props = defineProps({
   professional: {
@@ -91,6 +93,12 @@ onMounted(() => {
 
 const save = () => {
   emit('save', form.value);
+};
+
+const onPhoneInput = (event) => {
+  const formatted = formatPhone(event.target.value);
+  form.value.phone = formatted;
+  event.target.value = formatted;
 };
 </script>
 

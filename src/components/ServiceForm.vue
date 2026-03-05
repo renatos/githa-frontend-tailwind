@@ -51,7 +51,8 @@
                 </label>
               </div>
 
-              <div class="flex items-center justify-between gap-4 p-4 rounded-lg bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+              <div class="flex items-center justify-between gap-4 p-4 rounded-lg transition-colors border"
+                   :class="form.active ? 'bg-indigo-50/50 dark:bg-indigo-900/20 border-indigo-300 dark:border-indigo-700' : 'bg-slate-100/50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700'">
                 <p class="text-slate-900 dark:text-slate-100 text-sm font-medium">Ativo</p>
                 <label class="relative flex h-6 w-11 cursor-pointer items-center rounded-full border-none bg-slate-300 dark:bg-slate-600 p-1 has-[:checked]:justify-end has-[:checked]:bg-indigo-600 transition-colors">
                   <div class="h-4 w-4 rounded-full bg-white shadow-sm transition-transform"></div>

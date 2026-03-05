@@ -23,6 +23,10 @@
       :fetch-data="fetchDataAdapter"
       @row-click="(item) => $emit('edit', item)"
     >
+      <template #cell-phone="{ value }">
+        {{ value ? formatPhone(value) : '-' }}
+      </template>
+
       <template #cell-commissionRate="{ value }">
         {{ value ? value + '%' : '-' }}
       </template>
@@ -60,6 +64,8 @@ const columns = [
   { key: 'commissionRate', label: 'Comissão', sortable: true, align: 'end' },
   { key: 'active', label: 'Status', sortable: true, align: 'center' },
 ];
+
+import { formatPhone } from '../utils/formatters';
 
 const fetchDataAdapter = async (params) => {
   const query = {
