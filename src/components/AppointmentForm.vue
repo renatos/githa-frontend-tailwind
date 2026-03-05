@@ -5,9 +5,14 @@
       <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex-shrink-0 bg-[var(--color-bg-body)] dark:bg-slate-800/50">
         <div class="flex items-center gap-3">
           <span class="material-symbols-outlined text-[24px] text-slate-900 dark:text-slate-100">calendar_month</span>
-          <h2 class="text-lg font-bold leading-tight m-0 text-slate-900 dark:text-slate-100">
-            {{ appointment.id ? 'Editar Agendamento' : 'Novo Agendamento' }}
-          </h2>
+          <div class="flex flex-col">
+            <h2 class="text-lg font-bold leading-tight m-0 text-slate-900 dark:text-slate-100">
+              {{ appointment.id ? 'Editar Agendamento' : 'Novo Agendamento' }}
+            </h2>
+            <span v-if="subtitleTimestamp" class="text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5 capitalize">
+              {{ subtitleTimestamp }}
+            </span>
+          </div>
         </div>
         <button class="flex cursor-pointer items-center justify-center rounded-lg w-8 h-8 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors" @click="$emit('close')">
           <span class="material-symbols-outlined text-[20px]">close</span>
@@ -252,6 +257,21 @@ const finalPrice = computed(() => {
 const formatCurrency = (value) => {
   return new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(value);
 };
+
+const subtitleTimestamp = computed(() => {
+  if (!form.value.date || !form.value.start) return '';
+  try {
+    const [year, month, day] = form.value.date.split('-');
+    const [hour, minute] = form.value.start.split(':');
+    const dateObj = new Date(year, month - 1, day, hour, minute);
+    
+    // Create 'quinta-feira'
+    const dayOfWeek = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' }).format(dateObj);
+    return `${dayOfWeek.replace('-feira', ' feira')} às ${hour}:${minute}`;
+  } catch (e) {
+    return '';
+  }
+});
 
 onMounted(() => {
   if (props.appointment.id || props.appointment.startTime) {

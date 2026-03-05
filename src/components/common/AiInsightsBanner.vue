@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!loading && hasData"
+    v-if="!loading"
     class="relative overflow-hidden rounded-xl border border-indigo-500/30 bg-gradient-to-br from-indigo-900/30 to-slate-900 p-5 shadow-lg mb-6"
   >
     <!-- glow decoration -->
@@ -10,8 +10,8 @@
 
       <div class="flex flex-col gap-3 max-w-2xl">
         <div class="flex items-center gap-2">
-          <span class="text-indigo-400 text-xl">✨</span>
-          <h3 class="text-base font-semibold text-white tracking-wide">Análise de Retenção IA</h3>
+          <span class="text-indigo-400 text-xl">{{ icon }}</span>
+          <h3 class="text-base font-semibold text-white tracking-wide">{{ title }}</h3>
         </div>
 
         <!-- Official AI Text Insight -->
@@ -39,7 +39,7 @@
 
         <!-- All clear state -->
         <p v-if="!aiDescription && atRiskCount === 0" class="text-slate-300 text-sm leading-relaxed">
-          Nenhum cliente em situação altamente crítica relatado hoje. Continue o bom trabalho! 🎉
+          {{ allClearText }}
         </p>
       </div>
 
@@ -57,9 +57,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, defineProps } from 'vue';
 import { aiService } from '@/services/aiService';
 import api from '@/services/api';
+
+const props = defineProps({
+  context: {
+    type: String,
+    default: 'CLIENTS'
+  }
+});
 
 const loading = ref(true);
 
@@ -72,6 +79,12 @@ const criticalClient = ref(null);
 const criticalDaysSince = ref(null);
 
 const hasData = computed(() => aiDescription.value || atRiskCount.value > 0);
+
+const title = computed(() => props.context === 'CLIENTS' ? 'Análise de Retenção IA' : 'Visão Inteligente da Agenda');
+const icon = computed(() => props.context === 'CLIENTS' ? '✨' : '💡');
+const allClearText = computed(() => props.context === 'CLIENTS' 
+  ? 'Nenhum cliente em situação altamente crítica relatado hoje. Continue o bom trabalho! 🎉'
+  : 'Nenhum insight importante para a agenda no momento. Continue o bom trabalho! 🎉');
 
 /**
  * Calculate days since a date string.
@@ -87,39 +100,49 @@ const loadInsights = async () => {
   try {
     // 1. Load official AI insight text
     try {
-      const aiResp = await aiService.getDashboardInsights({ page: 0, size: 5, sort: 'createdAt,desc' });
+      const aiResp = await aiService.getDashboardInsights({ page: 0, size: 50, sort: 'createdAt,desc' });
       const allInsights = aiResp.data.content || [];
-      const retention = allInsights.filter(i => i.type && i.type.includes('RETENTION'));
-      if (retention.length > 0) {
-        aiDescription.value = retention[0].description ?? '';
-      }
       
+      if (props.context === 'CLIENTS') {
+        const retention = allInsights.filter(i => i.type && i.type.includes('RETENTION'));
+        if (retention.length > 0) {
+          aiDescription.value = retention[0].description ?? '';
+        }
+      } else if (props.context === 'APPOINTMENTS') {
+        const agdOps = allInsights.filter(i => i.type && (i.type.includes('OPPORTUNITY') || i.type === 'APPOINTMENTS'));
+        if (agdOps.length > 0) {
+          aiDescription.value = agdOps[0].description ?? '';
+        } else if (allInsights.length > 0) {
+          aiDescription.value = allInsights[0].description ?? '';
+        }
+      }
     } catch (e) {
       console.warn('Could not load AI text insights', e);
     }
 
-    // 2. Fetch AT_RISK client stats for enrichment
-    try {
-      const statsResp = await api.get('/reports/client-statistics', {
-        params: {
-          'client.status': 'AT_RISK',
-          page: 0,
-          size: 1,
-          sort: 'lastVisitDate,asc', // oldest visit first
-        }
-      });
-      const page = statsResp.data;
-      atRiskCount.value = page.totalElements ?? 0;
+    // 2. Fetch AT_RISK client stats for enrichment (ONLY for CLIENTS)
+    if (props.context === 'CLIENTS') {
+      try {
+        const statsResp = await api.get('/reports/client-statistics', {
+          params: {
+            'client.status': 'AT_RISK',
+            page: 0,
+            size: 1,
+            sort: 'lastVisitDate,asc', // oldest visit first
+          }
+        });
+        const page = statsResp.data;
+        atRiskCount.value = page.totalElements ?? 0;
 
-      if (page.content && page.content.length > 0) {
-        const top = page.content[0];
-        criticalClient.value = top;
-        criticalDaysSince.value = daysSince(top.lastVisitDate);
+        if (page.content && page.content.length > 0) {
+          const top = page.content[0];
+          criticalClient.value = top;
+          criticalDaysSince.value = daysSince(top.lastVisitDate);
+        }
+      } catch (e) {
+        console.warn('Could not load AT_RISK stats for enrichment', e);
       }
-    } catch (e) {
-      console.warn('Could not load AT_RISK stats for enrichment', e);
     }
-    
   } finally {
     loading.value = false;
   }

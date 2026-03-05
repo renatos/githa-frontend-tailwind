@@ -53,6 +53,9 @@
       </div>
     </header>
 
+    <!-- AI Insights Banner -->
+    <AiInsightsBanner context="APPOINTMENTS" />
+
     <!-- Loading State -->
     <div v-if="loading" class="flex items-center justify-center py-16">
       <div class="flex flex-col items-center gap-3">
@@ -196,6 +199,7 @@ import { ref, computed, onMounted, watch, defineEmits, defineExpose, defineProps
 import { appointmentService } from '../services/appointmentService';
 import { authService } from '../services/authService';
 import { enumService } from '../services/enumService';
+import AiInsightsBanner from './common/AiInsightsBanner.vue';
 
 const props = defineProps({
   embedded: { type: Boolean, default: false },
@@ -205,7 +209,7 @@ const props = defineProps({
 const emit = defineEmits(['new', 'edit', 'delete', 'confirm', 'complete', 'cancel', 'add-procedure']);
 
 // --- State ---
-const viewMode = ref('list');
+const viewMode = ref('calendar');
 const loading = ref(false);
 const appointments = ref([]);
 const isAdmin = ref(false);

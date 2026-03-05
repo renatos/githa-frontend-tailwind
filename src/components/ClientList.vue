@@ -143,7 +143,7 @@
 import { ref, defineEmits, defineExpose } from 'vue';
 import GenericTable from './common/GenericTable.vue';
 import GoogleContactsModal from './common/GoogleContactsModal.vue';
-import AiInsightsBanner from './clients/AiInsightsBanner.vue';
+import AiInsightsBanner from './common/AiInsightsBanner.vue';
 import { clientService } from '../services/clientService';
 import { formatShortName, formatPhone } from '../utils/formatters';
 
