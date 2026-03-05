@@ -27,9 +27,9 @@
     --color-text-muted: #64748b;
     --color-text-inverse: #ffffff;
 
-    --color-bg-body: #f8fafc;
+    --color-bg-body: #d1d5db;
     --color-bg-card: #ffffff;
-    --color-border: #e2e8f0;
+    --color-border: #b0b8c8;
 
     --color-highlight-row: #fef9c3;
 
@@ -78,6 +78,7 @@ body {
     background-color: var(--color-bg-body);
     line-height: 1.6;
 }
+
 
 /* Utilities */
 .container {

@@ -1,5 +1,5 @@
 <template>
-  <div class="font-sans text-gray-800 dark:text-gray-200 h-screen flex overflow-hidden bg-[#f4f6f8] dark:bg-gray-900" style="font-family: 'Inter', sans-serif;">
+  <div class="font-sans text-gray-800 dark:text-gray-200 h-screen flex overflow-hidden" style="background-color: var(--color-bg-body); font-family: 'Inter', sans-serif;">
     <!-- Mobile Header / Hamburger -->
     <div class="md:hidden flex items-center px-4 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 fixed top-0 left-0 w-full z-[900] h-[60px]">
       <button @click="toggleSidebar" class="text-gray-600 dark:text-gray-300 text-2xl p-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
@@ -117,7 +117,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 h-full overflow-y-auto no-scrollbar bg-[#f4f6f8] dark:bg-gray-900 md:ml-0 mt-[60px] md:mt-0 pb-[70px] md:pb-0">
+    <main class="flex-1 h-full overflow-y-auto no-scrollbar md:ml-0 mt-[60px] md:mt-0 pb-[70px] md:pb-0" style="background-color: var(--color-bg-body)">
       <div class="max-w-[1200px] mx-auto">
         <slot></slot>
       </div>

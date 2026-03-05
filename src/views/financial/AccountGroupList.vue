@@ -1,6 +1,6 @@
 <template>
   <div class="p-4 md:p-6 flex flex-col gap-6">
-    <header class="bg-white dark:bg-slate-800 shadow-sm rounded-xl border border-slate-200 dark:border-slate-700 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10">
+    <header class="bg-white dark:bg-slate-800 shadow-md rounded-xl border border-slate-300 dark:border-slate-700 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10" style="border-top: 3px solid #6366f1">
       <div class="flex flex-col gap-1">
         <div class="flex items-center gap-2">
           <h2 class="text-2xl font-bold text-slate-900 dark:text-white m-0">Grupos de Contas</h2>
