@@ -1,8 +1,8 @@
 <template>
   <div class="fixed inset-0 z-[1050] bg-slate-900/50 flex items-center justify-center p-4 backdrop-blur-sm" @click.self="$emit('close')">
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-[600px] flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700">
+    <div class="bg-[var(--color-bg-card)] dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-[600px] flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700">
       
-      <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex-shrink-0">
+      <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex-shrink-0 bg-[var(--color-bg-body)] dark:bg-slate-800/50">
         <div class="flex items-center gap-3">
           <span class="material-symbols-outlined text-[24px] text-slate-900 dark:text-slate-100">inventory_2</span>
           <h2 class="text-lg font-bold leading-tight m-0 text-slate-900 dark:text-slate-100">
@@ -16,7 +16,7 @@
 
       <div class="flex flex-col flex-1 overflow-hidden">
         <form @submit.prevent="save" class="flex flex-col h-full">
-          <div class="overflow-y-auto p-6 flex-1 bg-slate-50 dark:bg-slate-900/50">
+          <div class="overflow-y-auto p-6 flex-1 bg-transparent dark:bg-slate-900/50">
             <div class="flex flex-col gap-6">
 
               <div class="flex flex-col md:flex-row gap-6">
@@ -57,7 +57,7 @@
             </div>
           </div>
           
-          <footer class="flex items-center justify-end gap-3 border-t border-slate-200 dark:border-slate-700 px-6 py-4 bg-white dark:bg-slate-800 flex-shrink-0">
+          <footer class="flex items-center justify-end gap-3 border-t border-slate-200 dark:border-slate-700 px-6 py-4 bg-[var(--color-bg-body)] dark:bg-slate-800 flex-shrink-0">
             <button class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-500" type="button" @click="$emit('close')">
               Cancelar
             </button>

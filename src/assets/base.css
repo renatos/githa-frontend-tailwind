@@ -27,9 +27,9 @@
     --color-text-muted: #64748b;
     --color-text-inverse: #ffffff;
 
-    --color-bg-body: #d1d5db;
+    --color-bg-body: #d4d7ed;
     --color-bg-card: #ffffff;
-    --color-border: #b0b8c8;
+    --color-border: #b8bdd8;
 
     --color-highlight-row: #fef9c3;
 
@@ -210,4 +210,13 @@ body {
         min-height: 44px;
         min-width: 44px;
     }
+}
+
+/* Hide scrollbar utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

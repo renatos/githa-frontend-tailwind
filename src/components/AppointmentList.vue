@@ -151,7 +151,7 @@
       </div>
 
       <!-- Time Grid -->
-      <div class="overflow-y-auto max-h-[600px] relative">
+      <div class="overflow-y-auto max-h-[600px] relative scrollbar-hide">
         <div class="grid" :style="`grid-template-columns: 64px repeat(${weekDays.length}, 1fr)`">
 
           <!-- Rows for each hour -->
@@ -162,8 +162,9 @@
             </div>
             <!-- Day cell per hour -->
             <div v-for="day in weekDays" :key="day.iso"
-                 :class="['border-r border-b border-slate-300 dark:border-slate-700/50 last:border-r-0 relative min-h-[56px]',
-                           day.isToday ? (idx % 2 === 0 ? 'bg-indigo-100/60 dark:bg-indigo-900/10' : 'bg-indigo-50/60 dark:bg-indigo-900/5') : (idx % 2 === 0 ? 'bg-slate-100 dark:bg-slate-800/60' : 'bg-white dark:bg-slate-800')]">  
+                 :class="['border-r border-b border-slate-300 dark:border-slate-700/50 last:border-r-0 relative min-h-[56px] transition-colors cursor-pointer',
+                           day.isToday ? (idx % 2 === 0 ? 'bg-indigo-100/60 dark:bg-indigo-900/10 hover:bg-indigo-200/50 dark:hover:bg-indigo-900/30' : 'bg-indigo-50/60 dark:bg-indigo-900/5 hover:bg-indigo-100/50 dark:hover:bg-indigo-900/20') : (idx % 2 === 0 ? 'bg-slate-100 dark:bg-slate-800/60 hover:bg-slate-200/50 dark:hover:bg-slate-700/50' : 'bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/30')]"
+                 @click.stop="onCellClick(day.iso, hour)">  
               <!-- Appointment blocks for this cell -->
               <div v-for="appt in getAppointmentsForCell(day.iso, hour)" :key="appt.id"
                    :class="['absolute inset-x-1 rounded-md px-2 py-1 cursor-pointer text-xs border-l-2 overflow-hidden transition-all hover:brightness-110 hover:shadow-sm', calendarCardClass(appt.status)]"
@@ -201,7 +202,7 @@ const props = defineProps({
   clientId: { type: Number, default: null }
 });
 
-defineEmits(['new', 'edit', 'delete', 'confirm', 'complete', 'cancel', 'add-procedure']);
+const emit = defineEmits(['new', 'edit', 'delete', 'confirm', 'complete', 'cancel', 'add-procedure']);
 
 // --- State ---
 const viewMode = ref('list');
@@ -257,7 +258,12 @@ const goToToday = () => {
   currentDate.value = new Date();
 };
 
-// --- Week Days (for calendar) ---
+const onCellClick = (isoDate, hour) => {
+  // ISO string is YYYY-MM-DD
+  const startTime = `${isoDate}T${String(hour).padStart(2, '0')}:00:00`;
+  emit('new', { startTime });
+};
+
 const weekDays = computed(() => {
   const monday = getMonday(currentDate.value);
   const days = [];
