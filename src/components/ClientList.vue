@@ -2,9 +2,27 @@
   <div class="client-list p-4 md:p-6 flex flex-col gap-6">
     <header class="bg-white dark:bg-slate-800 shadow-md rounded-xl border border-slate-300 dark:border-slate-700 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10" style="border-top: 3px solid #6366f1">
       <div class="flex flex-col gap-1">
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-3">
           <h2 class="text-2xl font-bold text-slate-900 dark:text-white m-0">Clientes</h2>
-          <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200">AI Powered</span>
+          <AiContextBadge context="CLIENTS" contextName="Clientes">
+            <template #extra-content>
+              <div v-if="atRiskCount > 0" class="mt-2 p-3 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-lg flex flex-col gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-red-100 dark:bg-red-500/20 text-red-700 dark:text-red-400 text-xs font-semibold border border-red-200 dark:border-red-500/30">
+                    <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span>
+                    {{ atRiskCount }} cliente{{ atRiskCount !== 1 ? 's' : '' }} em risco
+                  </span>
+                </div>
+                <div v-if="criticalClient" class="text-sm text-slate-700 dark:text-slate-300">
+                  <span class="font-medium">Caso mais crítico:</span> 
+                  <span class="text-slate-900 dark:text-white font-semibold ml-1">{{ criticalClient.client.name }}</span>
+                  <span v-if="criticalDaysSince" class="text-amber-600 dark:text-amber-400 ml-1 text-xs font-medium">
+                    ({{ criticalDaysSince }} dias ausente)
+                  </span>
+                </div>
+              </div>
+            </template>
+          </AiContextBadge>
         </div>
         <p class="text-sm text-slate-500 dark:text-slate-400 m-0 mt-1">Gerencie seus clientes de forma eficiente e inteligente.</p>
       </div>
@@ -23,9 +41,6 @@
         </button>
       </div>
     </header>
-
-    <!-- AI Retention Analysis Banner -->
-    <AiInsightsBanner />
 
     <div class="flex flex-wrap items-center gap-3">
       <button 
@@ -140,12 +155,13 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, defineExpose } from 'vue';
+import { ref, defineEmits, defineExpose, onMounted } from 'vue';
 import GenericTable from './common/GenericTable.vue';
 import GoogleContactsModal from './common/GoogleContactsModal.vue';
-import AiInsightsBanner from './common/AiInsightsBanner.vue';
+import AiContextBadge from './common/AiContextBadge.vue';
 import { clientService } from '../services/clientService';
 import { formatShortName, formatPhone } from '../utils/formatters';
+import api from '../services/api';
 
 defineEmits(['new', 'edit', 'delete']);
 
@@ -164,6 +180,44 @@ const handleImportGoogle = async (clients) => {
     }
 };
 
+// --- AI Insights State ---
+const atRiskCount = ref(0);
+const criticalClient = ref(null);
+const criticalDaysSince = ref(null);
+
+const daysSince = (dateStr) => {
+  if (!dateStr) return null;
+  const ms = Date.now() - new Date(dateStr).getTime();
+  return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
+};
+
+const loadAtRiskStats = async () => {
+  try {
+    const statsResp = await api.get('/reports/client-statistics', {
+      params: {
+        'client.status': 'AT_RISK',
+        page: 0,
+        size: 1,
+        sort: 'lastVisitDate,asc',
+      }
+    });
+    const page = statsResp.data;
+    atRiskCount.value = page.totalElements ?? 0;
+
+    if (page.content && page.content.length > 0) {
+      const top = page.content[0];
+      criticalClient.value = top;
+      criticalDaysSince.value = daysSince(top.lastVisitDate);
+    }
+  } catch (e) {
+    console.warn('Could not load AT_RISK stats for AiContextBadge', e);
+  }
+};
+
+onMounted(() => {
+  loadAtRiskStats();
+});
+
 const columns = [
   { key: 'id', label: '#', width: '50px', sortable: true },
   { key: 'name', label: 'Nome', sortable: true, filterable: true },
@@ -171,7 +225,6 @@ const columns = [
   { key: 'phone', label: 'Telefone', sortable: false, filterable: true },
   { key: 'referredByName', label: 'Indicado Por', sortable: false },
 ];
-
 
 const selectedStatuses = ref([]);
 

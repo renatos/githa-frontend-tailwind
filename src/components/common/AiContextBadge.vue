@@ -81,6 +81,9 @@
               </div>
               <p class="m-0 text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{{ insight.description }}</p>
             </div>
+            
+            <!-- Custom injected content slot -->
+            <slot name="extra-content"></slot>
           </div>
         </div>
 
