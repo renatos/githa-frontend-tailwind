@@ -147,7 +147,7 @@
               <span class="material-symbols-outlined text-[20px]">chevron_left</span>
             </button>
             
-            <template v-for="page in visiblePages" :key="page">
+            <template v-for="(page, index) in visiblePages" :key="index">
               <span v-if="page === '...'" class="relative inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-sm font-medium text-slate-700 dark:text-slate-400 cursor-default">
                 ...
               </span>
@@ -264,8 +264,8 @@ const loadData = async () => {
 
     const result = await props.fetchData(params);
     serverItems.value = result.content;
-    totalItems.value = result.totalElements;
-    totalPages.value = result.totalPages;
+    totalItems.value = result.totalElements || 0;
+    totalPages.value = result.totalPages !== undefined ? result.totalPages : Math.ceil((result.totalElements || 0) / pageSize.value);
   } catch (error) {
     console.error("Failed to load data", error);
   } finally {
