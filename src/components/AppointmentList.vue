@@ -7,6 +7,7 @@
         <div class="flex flex-col gap-1">
           <div class="flex items-center gap-2">
             <h2 class="text-2xl font-bold text-slate-900 dark:text-white m-0">Agendamentos</h2>
+            <AiContextBadge context="APPOINTMENTS" />
           </div>
           <p class="text-sm text-slate-500 dark:text-slate-400 m-0 mt-1">Gerencie os agendamentos da clínica.</p>
         </div>
@@ -53,8 +54,6 @@
       </div>
     </header>
 
-    <!-- AI Insights Banner -->
-    <AiInsightsBanner context="APPOINTMENTS" />
 
     <!-- Loading State -->
     <div v-if="loading" class="flex items-center justify-center py-16">
@@ -170,11 +169,12 @@
                  @click.stop="onCellClick(day.iso, hour)">  
               <!-- Appointment blocks for this cell -->
               <div v-for="appt in getAppointmentsForCell(day.iso, hour)" :key="appt.id"
-                   :class="['absolute inset-x-1 rounded-md px-2 py-1 cursor-pointer text-xs border-l-2 overflow-hidden transition-all hover:brightness-110 hover:shadow-sm', calendarCardClass(appt.status)]"
+                   class="absolute rounded-md px-2 py-1 cursor-pointer text-xs border-l-2 transition-all duration-200 z-10 hover:z-30 hover:scale-[1.05] hover:shadow-lg group/appt"
+                   :class="calendarCardClass(appt.status)"
                    :style="getCardStyle(appt)"
-                   @click="$emit('edit', appt)">
-                <p class="font-semibold truncate">{{ appt.clientName }}</p>
-                <p class="opacity-75 truncate">{{ appt.serviceName }}</p>
+                   @click.stop="$emit('edit', appt)">
+                <p class="font-semibold truncate group-hover/appt:whitespace-normal group-hover/appt:break-words">{{ appt.clientName }}</p>
+                <p class="opacity-75 truncate group-hover/appt:whitespace-normal group-hover/appt:break-words">{{ appt.serviceName }}</p>
               </div>
             </div>
           </template>
@@ -199,7 +199,7 @@ import { ref, computed, onMounted, watch, defineEmits, defineExpose, defineProps
 import { appointmentService } from '../services/appointmentService';
 import { authService } from '../services/authService';
 import { enumService } from '../services/enumService';
-import AiInsightsBanner from './common/AiInsightsBanner.vue';
+import AiContextBadge from './common/AiContextBadge.vue';
 
 const props = defineProps({
   embedded: { type: Boolean, default: false },
@@ -212,6 +212,7 @@ const emit = defineEmits(['new', 'edit', 'delete', 'confirm', 'complete', 'cance
 const viewMode = ref('calendar');
 const loading = ref(false);
 const appointments = ref([]);
+const appointmentLayout = ref({});
 const isAdmin = ref(false);
 const statusMap = ref({});
 const currentDate = ref(new Date());
@@ -313,6 +314,7 @@ const loadAppointments = async () => {
 
     const response = await appointmentService.getAll(query);
     appointments.value = response.data?.content || [];
+    calculateLayout(appointments.value);
   } catch (e) {
     console.error('Failed to load appointments', e);
     appointments.value = [];
@@ -405,6 +407,74 @@ const calendarCardClass = (status) => {
 };
 
 // --- Calendar Cell Logic ---
+const calculateLayout = (apptsList) => {
+  const byDay = {};
+  apptsList.forEach(appt => {
+    if (!appt.startTime || !appt.endTime) return;
+    const day = appt.startTime.split('T')[0];
+    if (!byDay[day]) byDay[day] = [];
+    byDay[day].push(appt);
+  });
+
+  const layoutDict = {};
+
+  Object.values(byDay).forEach(dayAppts => {
+    dayAppts.sort((a, b) => {
+      const aStart = new Date(a.startTime).getTime();
+      const bStart = new Date(b.startTime).getTime();
+      if (aStart !== bStart) return aStart - bStart;
+      const aEnd = new Date(a.endTime).getTime();
+      const bEnd = new Date(b.endTime).getTime();
+      return bEnd - aEnd;
+    });
+
+    const packEvents = (columns) => {
+      const numColumns = columns.length;
+      columns.forEach((col, colIdx) => {
+        col.forEach(appt => {
+          layoutDict[appt.id] = { col: colIdx, numColumns: numColumns };
+        });
+      });
+    };
+
+    let columns = [];
+    let lastEventEnding = null;
+
+    dayAppts.forEach(appt => {
+      const start = new Date(appt.startTime).getTime();
+      if (lastEventEnding !== null && start >= lastEventEnding) {
+        packEvents(columns);
+        columns = [];
+        lastEventEnding = null;
+      }
+
+      let placed = false;
+      for (const col of columns) {
+        const lastInCol = col[col.length - 1];
+        if (new Date(lastInCol.endTime).getTime() <= start) {
+          col.push(appt);
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) {
+        columns.push([appt]);
+      }
+
+      const end = new Date(appt.endTime).getTime();
+      if (lastEventEnding === null || end > lastEventEnding) {
+        lastEventEnding = end;
+      }
+    });
+
+    if (columns.length > 0) {
+      packEvents(columns);
+    }
+  });
+  
+  appointmentLayout.value = layoutDict;
+};
+
 const getAppointmentsForCell = (dayIso, hour) => {
   return appointments.value.filter(appt => {
     if (!appt.startTime) return false;
@@ -415,7 +485,7 @@ const getAppointmentsForCell = (dayIso, hour) => {
 };
 
 const getCardStyle = (appt) => {
-  if (!appt.startTime || !appt.endTime) return { top: '2px', height: '52px' };
+  if (!appt.startTime || !appt.endTime) return { top: '2px', height: '52px', left: '4px', width: 'calc(100% - 8px)' };
   const startH = parseInt(appt.startTime.split('T')[1]?.substring(0, 2) || '8');
   const startM = parseInt(appt.startTime.split('T')[1]?.substring(3, 5) || '0');
   const endH = parseInt(appt.endTime.split('T')[1]?.substring(0, 2) || '8');
@@ -423,8 +493,18 @@ const getCardStyle = (appt) => {
   const cellHeight = 56; // min-h in px
   const startMin = (startH - Math.floor(startH)) * 60 + startM;
   const durationMin = (endH * 60 + endM) - (startH * 60 + startM);
-  const top = (startM / 60) * cellHeight;
   const height = Math.max((durationMin / 60) * cellHeight, 30);
-  return { top: `${top}px`, height: `${height}px` };
+
+  const layout = appointmentLayout.value[appt.id] || { col: 0, numColumns: 1 };
+  
+  const leftPercent = (layout.col / layout.numColumns) * 100;
+  const widthPercent = (1 / layout.numColumns) * 100;
+
+  return { 
+    top: `${top}px`, 
+    height: `${height}px`,
+    left: `calc(${leftPercent}% + 4px)`,
+    width: `calc(${widthPercent}% - 8px)`
+  };
 };
 </script>

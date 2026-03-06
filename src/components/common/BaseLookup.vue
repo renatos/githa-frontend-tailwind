@@ -17,12 +17,12 @@
 
     <!-- Lookup Mode (Inputs) -->
     <div v-else class="flex gap-2 w-full">
-      <!-- ID Input -->
-      <div class="w-20 shrink-0">
+      <!-- ID Input (Optional) -->
+      <div v-if="!hideId" class="w-16 sm:w-20 shrink-0">
         <input
             :disabled="disabled"
             :value="modelValue"
-            class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-12 px-2 py-3 text-center text-sm font-normal leading-normal transition-colors disabled:opacity-50"
+            class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/50 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-10 px-2 py-3 text-center text-xs sm:text-sm font-normal leading-normal transition-colors disabled:opacity-50"
             placeholder="ID"
             type="text"
             @input="onIdInput"
@@ -36,7 +36,7 @@
               v-model="searchQuery"
               :disabled="disabled"
               :placeholder="placeholder"
-              class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-12 px-4 py-3 text-sm font-normal leading-normal transition-colors disabled:opacity-50"
+              class="form-input flex w-full resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-10 px-3 py-3 text-xs sm:text-sm font-normal leading-normal transition-colors disabled:opacity-50"
               type="text"
               @blur="onBlur"
               @focus="onFocus"
@@ -46,12 +46,12 @@
           <!-- Edit Button -->
           <button
               v-if="modelValue && !disabled && canEdit"
-              class="shrink-0 flex items-center justify-center w-12 h-12 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
+              class="shrink-0 flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors"
               title="Editar registro selecionado"
               type="button"
               @click="$emit('edit', modelValue)"
           >
-            <span class="material-symbols-outlined text-[20px]">edit</span>
+            <span class="material-symbols-outlined text-[18px]">edit</span>
           </button>
         </div>
 
@@ -103,6 +103,10 @@ const props = defineProps({
     required: true
   },
   disabled: {
+    type: Boolean,
+    default: false
+  },
+  hideId: {
     type: Boolean,
     default: false
   }
