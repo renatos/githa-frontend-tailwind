@@ -493,7 +493,8 @@ const getCardStyle = (appt) => {
   const cellHeight = 56; // min-h in px
   const startMin = (startH - Math.floor(startH)) * 60 + startM;
   const durationMin = (endH * 60 + endM) - (startH * 60 + startM);
-  const height = Math.max((durationMin / 60) * cellHeight, 30);
+  const top = (startM / 60) * cellHeight;
+  const minHeight = Math.max((durationMin / 60) * cellHeight, 30);
 
   const layout = appointmentLayout.value[appt.id] || { col: 0, numColumns: 1 };
   
@@ -502,7 +503,8 @@ const getCardStyle = (appt) => {
 
   return { 
     top: `${top}px`, 
-    height: `${height}px`,
+    minHeight: `${minHeight}px`,
+    height: 'auto',
     left: `calc(${leftPercent}% + 4px)`,
     width: `calc(${widthPercent}% - 8px)`
   };

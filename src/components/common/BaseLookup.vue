@@ -30,7 +30,7 @@
       </div>
 
       <!-- Description Input -->
-      <div class="flex-1 relative">
+      <div class="flex-1 relative" ref="inputWrapperRef">
         <div class="flex gap-2">
           <input
               v-model="searchQuery"
@@ -56,10 +56,14 @@
         </div>
 
         <!-- Dropdown Results -->
-        <div
-            v-if="showResults && results.length > 0"
-            class="absolute top-full left-0 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-50 max-h-48 overflow-y-auto mt-2 custom-scrollbar"
-        >
+        <Teleport to="body">
+          <div
+              v-if="showResults && results.length > 0"
+              ref="dropdownRef"
+              :style="dropdownStyle"
+              class="fixed bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-xl z-[99999] max-h-48 overflow-y-auto custom-scrollbar"
+              @mousedown.stop
+          >
           <div
               v-for="item in results"
               :key="item.id"
@@ -73,15 +77,16 @@
                  {{ formatCurrency(item.price) }}
               </span>
             </div>
+            </div>
           </div>
-        </div>
+        </Teleport>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import {ref, watch, defineProps, defineEmits, onMounted, useAttrs, computed} from 'vue';
+import {ref, watch, defineProps, defineEmits, onMounted, onUnmounted, nextTick, useAttrs, computed} from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -130,6 +135,36 @@ const showResults = ref(false);
 let searchTimeout = null;
 let idSearchTimeout = null;
 
+// Teleport & Positioning State
+const inputWrapperRef = ref(null);
+const dropdownRef = ref(null);
+const dropdownStyle = ref({ top: '0px', left: '0px', width: '0px' });
+
+const updateDropdownPosition = () => {
+  if (inputWrapperRef.value) {
+    const rect = inputWrapperRef.value.getBoundingClientRect();
+    let top = rect.bottom + 8;
+    // Prevent rendering below screen
+    if (top + 192 > window.innerHeight && rect.top - 192 - 8 > 0) {
+       top = rect.top - 192 - 8;
+    }
+    dropdownStyle.value = {
+      top: `${top}px`,
+      left: `${rect.left}px`,
+      width: `${rect.width}px`
+    };
+  }
+};
+
+const handleScroll = (event) => {
+  if (showResults.value) {
+    if (dropdownRef.value && dropdownRef.value.contains(event.target)) {
+      return;
+    }
+    showResults.value = false;
+  }
+};
+
 onMounted(async () => {
   if (props.initialDescription) {
     searchQuery.value = props.initialDescription;
@@ -161,6 +196,14 @@ onMounted(async () => {
   } catch (error) {
     console.error('Error initializing Lookup:', error);
   }
+
+  window.addEventListener('scroll', handleScroll, true);
+  window.addEventListener('resize', updateDropdownPosition);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll, true);
+  window.removeEventListener('resize', updateDropdownPosition);
 });
 
 // Watchers
@@ -173,6 +216,14 @@ watch(() => props.initialDescription, (newVal) => {
 watch(() => props.modelValue, (newVal) => {
   if (!newVal && !props.initialDescription) {
     searchQuery.value = '';
+  }
+});
+
+watch(showResults, (val) => {
+  if (val) {
+    nextTick(() => {
+      updateDropdownPosition();
+    });
   }
 });
 

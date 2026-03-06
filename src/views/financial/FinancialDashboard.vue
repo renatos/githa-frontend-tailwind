@@ -1,12 +1,10 @@
 <template>
-  <div class="p-4 lg:p-8 max-w-7xl mx-auto space-y-8 min-h-screen bg-slate-950 text-slate-200">
+  <div class="p-4 md:p-6 flex flex-col gap-6">
     <!-- Header Row -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-      <div>
-        <h1 class="text-3xl font-bold bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-          Dashboard Financeiro
-        </h1>
-        <p class="text-slate-500 mt-1">Gestão de fluxo de caixa e transações em tempo real</p>
+    <header class="bg-white dark:bg-slate-800 shadow-md rounded-xl border border-slate-300 dark:border-slate-700 px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4 z-10" style="border-top: 3px solid #6366f1">
+      <div class="flex flex-col gap-1">
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white m-0">Financeiro</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 m-0 mt-1">Gestão de fluxo de caixa e transações em tempo real.</p>
       </div>
 
       <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -51,51 +49,51 @@
           </div>
         </div>
       </div>
-    </div>
+    </header>
     
     <!-- Summary Cards (Monthly Context) -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <!-- Income Card -->
-      <div class="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 transition-all duration-300 hover:border-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/5">
+      <div class="relative group overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 transition-all duration-300 hover:border-emerald-500/30 hover:shadow-2xl hover:shadow-emerald-500/5">
         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
           <i class="fa-solid fa-arrow-trend-up text-5xl text-emerald-500"></i>
         </div>
-        <h3 class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-2">Receitas ({{ currentMonthLabel }})</h3>
-        <div class="text-3xl font-bold text-emerald-400 mb-2">{{ formatCurrency(summary.totalIncome) }}</div>
-        <div class="flex items-center text-xs text-slate-500 bg-slate-950/50 rounded-lg p-2 border border-slate-800/50">
+        <h3 class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider mb-2">Receitas ({{ currentMonthLabel }})</h3>
+        <div class="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">{{ formatCurrency(summary.totalIncome) }}</div>
+        <div class="flex items-center text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border border-slate-100 dark:border-slate-700/50">
           <span class="mr-2">Pendente:</span>
-          <span class="font-medium text-slate-300">{{ formatCurrency(summary.pendingIncome || 0) }}</span>
+          <span class="font-medium text-slate-700 dark:text-slate-300">{{ formatCurrency(summary.pendingIncome || 0) }}</span>
         </div>
       </div>
       
       <!-- Expense Card -->
-      <div class="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 transition-all duration-300 hover:border-rose-500/30 hover:shadow-2xl hover:shadow-rose-500/5">
+      <div class="relative group overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 transition-all duration-300 hover:border-rose-500/30 hover:shadow-2xl hover:shadow-rose-500/5">
         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
           <i class="fa-solid fa-arrow-trend-down text-5xl text-rose-500"></i>
         </div>
-        <h3 class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-2">Despesas ({{ currentMonthLabel }})</h3>
-        <div class="text-3xl font-bold text-rose-400 mb-2">{{ formatCurrency(summary.totalExpense) }}</div>
-        <div class="flex items-center text-xs text-slate-500 bg-slate-950/50 rounded-lg p-2 border border-slate-800/50">
+        <h3 class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider mb-2">Despesas ({{ currentMonthLabel }})</h3>
+        <div class="text-3xl font-bold text-rose-600 dark:text-rose-400 mb-2">{{ formatCurrency(summary.totalExpense) }}</div>
+        <div class="flex items-center text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border border-slate-100 dark:border-slate-700/50">
           <span class="mr-2">Pendente:</span>
-          <span class="font-medium text-slate-300">{{ formatCurrency(summary.pendingExpense || 0) }}</span>
+          <span class="font-medium text-slate-700 dark:text-slate-300">{{ formatCurrency(summary.pendingExpense || 0) }}</span>
         </div>
       </div>
       
       <!-- Balance Card -->
       <div 
-        class="relative group overflow-hidden bg-slate-900 border border-slate-800 rounded-2xl p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/5"
+        class="relative group overflow-hidden bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-6 transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/5"
         :class="summary.balance < 0 ? 'hover:border-rose-500/30' : 'hover:border-indigo-500/30'"
       >
         <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
           <i class="fa-solid fa-scale-balanced text-5xl" :class="summary.balance < 0 ? 'text-rose-500' : 'text-indigo-500'"></i>
         </div>
-        <h3 class="text-slate-500 text-sm font-semibold uppercase tracking-wider mb-2">Saldo Acumulado</h3>
-        <div class="text-3xl font-bold mb-2 transition-colors" :class="summary.balance < 0 ? 'text-rose-400' : 'text-indigo-400'">
+        <h3 class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider mb-2">Saldo Acumulado</h3>
+        <div class="text-3xl font-bold mb-2 transition-colors" :class="summary.balance < 0 ? 'text-rose-600 dark:text-rose-400' : 'text-indigo-600 dark:text-indigo-400'">
           {{ formatCurrency(summary.balance) }}
         </div>
-        <div class="flex items-center text-xs text-slate-500 bg-slate-950/50 rounded-lg p-2 border border-slate-800/50">
+        <div class="flex items-center text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 border border-slate-100 dark:border-slate-700/50">
           <span class="mr-2">Soma Pendentes:</span>
-          <span class="font-medium" :class="summary.pendingBalance < 0 ? 'text-rose-500' : 'text-slate-300'">
+          <span class="font-medium" :class="summary.pendingBalance < 0 ? 'text-rose-600 dark:text-rose-500' : 'text-slate-700 dark:text-slate-300'">
             {{ formatCurrency(summary.pendingBalance || 0) }}
           </span>
         </div>
@@ -130,14 +128,8 @@
     </div>
 
     <!-- Transaction List Section -->
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl shadow-xl overflow-hidden backdrop-blur-sm">
-      <div class="p-6 border-b border-slate-800 flex items-center justify-between">
-        <h2 class="text-lg font-bold flex items-center gap-2">
-          <i class="fa-solid fa-list-ul text-indigo-500"></i>
-          Fluxo de Caixa
-        </h2>
-      </div>
-      <div class="p-1 sm:p-4 min-h-[400px]">
+    <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-xl overflow-hidden backdrop-blur-sm">
+      <div class="p-4 md:p-6 min-h-[400px]">
           <TransactionList 
               ref="transactionListRef" 
               :month="selectedMonth" 

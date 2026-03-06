@@ -8,50 +8,50 @@
       </div>
     </div>
 
-    <div class="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900/50 backdrop-blur-sm">
+    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700 bg-[var(--color-bg-body)] dark:bg-slate-900/50 backdrop-blur-sm">
       <table class="w-full text-left border-collapse">
         <thead>
-          <tr class="border-b border-slate-800 bg-slate-900">
-            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 w-12 text-center">Tipo</th>
-            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Item</th>
-            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 w-20 text-center">Qtd</th>
-            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 w-32 text-right">Unitário</th>
-            <th class="px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 w-32 text-right">Total</th>
-            <th class="px-4 py-3 w-12"></th>
+          <tr class="border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900">
+            <th class="px-2 sm:px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 w-24 sm:w-28 text-center">Tipo</th>
+            <th class="px-2 sm:px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">Item</th>
+            <th class="px-2 sm:px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 w-16 sm:w-20 text-center">Qtd</th>
+            <th class="px-2 sm:px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 w-28 sm:w-32 text-right">Unitário</th>
+            <th class="px-2 sm:px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 w-28 sm:w-32 text-right">Total</th>
+            <th class="px-2 sm:px-4 py-3 w-10 sm:w-12"></th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-slate-800/50">
+        <tbody class="divide-y divide-slate-200 dark:divide-slate-700/50">
           <!-- Existing Items -->
-          <tr v-for="(item, index) in items" :key="item.id || index" class="group/row hover:bg-slate-800/30 transition-colors">
-            <td class="px-4 py-3 text-center">
+          <tr v-for="(item, index) in items" :key="item.id || index" class="group/row hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+            <td class="px-2 sm:px-4 py-3 text-center">
               <div class="flex items-center justify-center">
                 <i v-if="item.type === 'PRODUCT'" class="fa-solid fa-box text-amber-500/80 text-lg" title="Produto"></i>
                 <i v-else class="fa-solid fa-hand-sparkles text-indigo-400 text-lg" title="Serviço"></i>
               </div>
             </td>
-            <td class="px-4 py-3">
+            <td class="px-2 sm:px-4 py-3">
               <div class="flex flex-col">
-                <span class="text-slate-200 font-medium text-sm">
+                <span class="text-slate-900 dark:text-slate-200 font-medium text-xs sm:text-sm">
                   {{ item.type === 'PRODUCT' ? item.productName : item.serviceName }}
                 </span>
-                <span v-if="item.professionalName" class="text-slate-500 text-[11px] flex items-center gap-1">
+                <span v-if="item.professionalName" class="text-slate-500 text-[10px] sm:text-[11px] flex items-center gap-1">
                   <i class="fa-solid fa-user-tie text-[9px]"></i>
                   {{ item.professionalName }}
                 </span>
               </div>
             </td>
-            <td class="px-4 py-3 text-center">
-              <span class="text-slate-300 text-sm font-medium bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
+            <td class="px-2 sm:px-4 py-3 text-center">
+              <span class="text-slate-700 dark:text-slate-300 text-xs sm:text-sm font-medium bg-slate-100 dark:bg-slate-950 px-1.5 sm:px-2 py-0.5 rounded border border-slate-200 dark:border-slate-800">
                 {{ item.quantity }}
               </span>
             </td>
-            <td class="px-4 py-3 text-right text-slate-400 text-sm">
+            <td class="px-2 sm:px-4 py-3 text-right text-slate-600 dark:text-slate-400 text-xs sm:text-sm">
               {{ formatCurrency(item.unitPrice) }}
             </td>
-            <td class="px-4 py-3 text-right text-emerald-400 font-bold text-sm">
+            <td class="px-2 sm:px-4 py-3 text-right text-emerald-600 dark:text-emerald-400 font-bold text-xs sm:text-sm">
               {{ formatCurrency(item.unitPrice * item.quantity) }}
             </td>
-            <td class="px-4 py-3 text-center">
+            <td class="px-2 sm:px-4 py-3 text-center">
               <button 
                 v-if="canSave" 
                 @click="$emit('removeItem', index)"
@@ -71,12 +71,12 @@
           </tr>
 
           <!-- Add New Item Row -->
-          <tr v-if="canSave" class="bg-indigo-600/5 border-t border-indigo-500/20">
-            <td class="px-3 py-4 text-center">
+          <tr v-if="canSave" class="bg-indigo-50/50 dark:bg-indigo-600/5 border-t border-indigo-200 dark:border-indigo-500/20">
+            <td class="px-1 sm:px-3 py-4 text-center">
               <div class="relative group">
                 <select 
                   v-model="newItem.type" 
-                  class="appearance-none bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs font-bold text-slate-300 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none w-full cursor-pointer transition-all"
+                  class="appearance-none bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl px-2 sm:px-3 py-2 text-[10px] sm:text-xs font-bold text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none w-full cursor-pointer transition-colors"
                   @change="$emit('typeChange', newItem.type)"
                 >
                   <option v-for="type in saleItemTypes" :key="type.name" :value="type.name">
@@ -86,7 +86,7 @@
                 <i class="fa-solid fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-slate-600 pointer-events-none group-hover:text-slate-400"></i>
               </div>
             </td>
-            <td class="px-3 py-4">
+            <td class="px-1 sm:px-3 py-4">
               <div class="flex flex-col gap-2">
                 <BaseLookup
                   v-if="newItem.type === 'PRODUCT'"
@@ -121,27 +121,27 @@
                 </div>
               </div>
             </td>
-            <td class="px-3 py-4">
+            <td class="px-1 sm:px-3 py-4">
               <input 
                 v-model="newItem.quantity" 
                 type="number" 
                 min="1" 
                 inputmode="numeric"
-                class="w-full bg-slate-950 border border-slate-700 rounded-lg p-2 text-center text-sm text-indigo-400 font-bold focus:ring-1 focus:ring-indigo-500 outline-none border-dashed"
+                class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg p-1.5 sm:p-2 text-center text-xs sm:text-sm text-indigo-600 dark:text-indigo-400 font-bold focus:ring-1 focus:ring-indigo-500 outline-none border-dashed transition-colors"
               >
             </td>
-            <td class="px-3 py-4">
+            <td class="px-1 sm:px-3 py-4">
               <CurrencyInput 
                 v-model="newItem.unitPrice" 
-                class="text-right"
+                class="w-full min-w-[70px] bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 rounded-lg p-1.5 sm:p-2 text-right text-xs sm:text-sm font-bold focus:ring-1 focus:ring-indigo-500 outline-none transition-colors"
               />
             </td>
-            <td class="px-3 py-4 text-right">
-              <div class="text-emerald-400 font-bold text-sm">
+            <td class="px-1 sm:px-3 py-4 text-right">
+              <div class="text-emerald-600 dark:text-emerald-400 font-bold text-xs sm:text-sm">
                 {{ formatCurrency(newItem.unitPrice * newItem.quantity) }}
               </div>
             </td>
-            <td class="px-3 py-4 text-center">
+            <td class="px-1 sm:px-3 py-4 text-center">
               <button
                 :disabled="!isItemValid"
                 @click="onAddItem"

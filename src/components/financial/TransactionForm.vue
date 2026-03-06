@@ -1,16 +1,16 @@
 <template>
   <Teleport to="body">
     <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl shadow-black/50 animate-in zoom-in-95 duration-300">
+    <div class="bg-[var(--color-bg-card)] dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-slate-200 dark:border-slate-700 animate-in zoom-in-95 duration-300">
       
       <!-- Modal Header -->
-      <div class="shrink-0 flex items-center justify-between p-6 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md">
+      <div class="shrink-0 flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 bg-[var(--color-bg-body)] dark:bg-slate-800/50">
         <div class="flex items-center gap-3">
-          <div class="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20">
-            <i class="fa-solid fa-money-bill-transfer text-indigo-400"></i>
+          <div class="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20">
+            <i class="fa-solid fa-money-bill-transfer text-indigo-600 dark:text-indigo-400"></i>
           </div>
           <div>
-            <h3 class="text-xl font-bold tracking-tight text-white">
+            <h3 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
               {{ transaction.id ? 'Editar Transação' : 'Nova Transação' }}
             </h3>
             <p v-if="transaction.id" class="text-xs text-slate-500 truncate max-w-[200px] md:max-w-none">
@@ -21,26 +21,26 @@
         <button 
           @click="$emit('close')" 
           type="button"
-          class="p-2 rounded-xl text-slate-500 hover:text-white hover:bg-slate-800 transition-all active:scale-90"
+          class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg w-8 h-8 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors shrink-0"
         >
-          <i class="fa-solid fa-xmark text-lg"></i>
+          <span class="material-symbols-outlined text-[20px]">close</span>
         </button>
       </div>
 
-      <div class="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar bg-slate-900/30 min-h-0">
-        <form @submit.prevent="save" class="space-y-8">
+      <div class="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar bg-transparent dark:bg-slate-900/50 min-h-0">
+        <form @submit.prevent="save" class="space-y-8 h-full flex flex-col">
           
           <!-- Lançamento Mode Selector -->
-          <div v-if="!transaction.id" class="flex p-1 bg-slate-950 border border-slate-800 rounded-2xl">
+          <div v-if="!transaction.id" class="flex p-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg">
             <button
               v-for="mode in [{id:'MANUAL', label:'Lançamento Manual', icon:'fa-keyboard'}, {id:'SALE', label:'Venda de Produtos/Serviços', icon:'fa-cart-shopping'}]"
               :key="mode.id"
               type="button"
               @click="launchMode = mode.id"
-              class="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-bold transition-all duration-300"
+              class="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-md text-sm font-bold transition-all duration-300"
               :class="launchMode === mode.id 
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20' 
-                : 'text-slate-500 hover:text-slate-300'"
+                ? 'bg-white dark:bg-indigo-600 text-indigo-600 dark:text-white shadow-sm border border-slate-200/50 dark:border-transparent' 
+                : 'text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'"
             >
               <i class="fa-solid" :class="mode.icon"></i>
               {{ mode.label }}
@@ -49,14 +49,14 @@
 
           <!-- Description Section -->
           <div v-if="launchMode === 'MANUAL'" class="space-y-2">
-            <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Descrição</label>
-            <div class="relative group">
-              <i class="fa-solid fa-signature absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-500 transition-colors"></i>
+            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Descrição</label>
+            <div class="relative group mt-1">
+              <i class="fa-solid fa-signature absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-600 group-focus-within:text-indigo-600 transition-colors"></i>
               <input 
                 v-model="form.description" 
                 :disabled="!canSave"
                 placeholder="Ex: Aluguel mensal, Compra de suprimentos..."
-                class="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3.5 pl-11 pr-4 text-slate-200 placeholder:text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all disabled:opacity-50"
+                class="form-input flex w-full h-12 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 placeholder:text-slate-400 py-3.5 pl-11 pr-4 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors disabled:opacity-50"
               />
             </div>
           </div>
@@ -64,15 +64,17 @@
           <!-- SALE MODE: Client Selection -->
           <div v-if="launchMode === 'SALE'" class="space-y-6">
             <div class="space-y-2">
-              <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Cliente</label>
-              <BaseLookup
-                v-model="form.clientId"
-                :disabled="!canSave"
-                :initial-description="form.clientName"
-                :search-service="clientService"
-                placeholder="Pesquisar cliente..."
-                @select="onClientSelect"
-              />
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Cliente</label>
+              <div class="h-12 w-full mt-1">
+                <BaseLookup
+                  v-model="form.clientId"
+                  :disabled="!canSave"
+                  :initial-description="form.clientName"
+                  :search-service="clientService"
+                  placeholder="Pesquisar cliente..."
+                  @select="onClientSelect"
+                />
+              </div>
             </div>
 
             <!-- SALE MODE: Items Table -->
@@ -92,43 +94,47 @@
 
           <!-- Account Group Selection (Manual Mode) -->
           <div v-if="!isAppointmentTransaction && launchMode === 'MANUAL'" class="space-y-2">
-            <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Grupo de Contas</label>
-            <BaseLookup
-              v-model="form.accountGroupId"
-              :disabled="!canSave"
-              :initial-description="form.accountGroupName"
-              :search-service="accountGroupServiceAdapter"
-              placeholder="Ex: Custos de Operação, Investimentos..."
-              @select="onAccountGroupSelect"
-            />
+            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Grupo de Contas</label>
+            <div class="h-12 w-full mt-1">
+              <BaseLookup
+                v-model="form.accountGroupId"
+                :disabled="!canSave"
+                :initial-description="form.accountGroupName"
+                :search-service="accountGroupServiceAdapter"
+                placeholder="Ex: Custos de Operação, Investimentos..."
+                @select="onAccountGroupSelect"
+              />
+            </div>
           </div>
 
           <!-- Payment Info (Visible for Income) -->
           <div v-if="form.nature === 'INCOME'" class="space-y-2">
-            <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Forma de Pagamento</label>
-            <BaseLookup
-              v-model="form.paymentMethodId"
-              :disabled="!canSave"
-              :initial-description="form.paymentMethodName"
-              :search-service="paymentMethodService"
-              placeholder="Selecione o método..."
-              @select="onPaymentMethodSelect"
-            />
+            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Forma de Pagamento</label>
+            <div class="h-12 w-full mt-1">
+              <BaseLookup
+                v-model="form.paymentMethodId"
+                :disabled="!canSave"
+                :initial-description="form.paymentMethodName"
+                :search-service="paymentMethodService"
+                placeholder="Selecione o método..."
+                @select="onPaymentMethodSelect"
+              />
+            </div>
           </div>
 
           <!-- Financial Details Row -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
              <div v-if="launchMode === 'MANUAL'" class="space-y-2">
-              <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Natureza</label>
-              <div class="bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3 text-slate-400 font-semibold flex items-center gap-2 opacity-60 grayscale cursor-not-allowed">
-                <i class="fa-solid" :class="form.nature === 'INCOME' ? 'fa-arrow-up text-emerald-500' : 'fa-arrow-down text-rose-500'"></i>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Natureza</label>
+              <div class="form-input flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-3 font-semibold items-center gap-2 cursor-not-allowed">
+                <i class="fa-solid" :class="form.nature === 'INCOME' ? 'fa-arrow-up text-emerald-600 dark:text-emerald-500' : 'fa-arrow-down text-rose-600 dark:text-rose-500'"></i>
                 {{ form.nature === 'INCOME' ? 'Receita' : 'Despesa' }}
               </div>
             </div>
 
             <div class="space-y-2">
-              <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Valor Total</label>
-              <div class="relative group text-indigo-400">
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Valor Total</label>
+              <div class="relative group mt-1">
                 <CurrencyInput 
                   v-model="form.amount" 
                   :disabled="!canSave" 
@@ -138,11 +144,11 @@
             </div>
 
             <div class="space-y-2">
-              <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Status</label>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Status</label>
               <select 
                 v-model="form.status" 
                 :disabled="!canSave"
-                class="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3.5 px-4 text-slate-200 font-bold outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all appearance-none cursor-pointer"
+                class="form-select flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 font-bold px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors cursor-pointer"
               >
                 <option v-for="status in transactionStatuses" :key="status.name" :value="status.name">
                   {{ status.description }}
@@ -152,14 +158,14 @@
           </div>
 
           <!-- Linked Appointment Info -->
-          <div v-if="isAppointmentTransaction" class="bg-indigo-500/5 border border-indigo-500/20 rounded-2xl p-4 flex items-center justify-between">
+          <div v-if="isAppointmentTransaction" class="bg-indigo-50 dark:bg-indigo-500/5 border border-indigo-200 dark:border-indigo-500/20 rounded-xl p-4 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="p-2 rounded-xl bg-indigo-500/20">
-                <i class="fa-solid fa-calendar-check text-indigo-400"></i>
+              <div class="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-500/20">
+                <i class="fa-solid fa-calendar-check text-indigo-600 dark:text-indigo-400"></i>
               </div>
               <div>
-                <span class="text-[10px] uppercase font-bold tracking-widest text-slate-500 block">Vínculo</span>
-                <span class="text-sm font-semibold text-slate-200">Vinculado ao Agendamento #{{ form.appointmentId }}</span>
+                <span class="text-[10px] uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400 block">Vínculo</span>
+                <span class="text-sm font-semibold text-slate-900 dark:text-slate-200">Vinculado ao Agendamento #{{ form.appointmentId }}</span>
               </div>
             </div>
             <button 
@@ -181,23 +187,23 @@
           <!-- Secondary Details Row -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-              <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Categoria (Opcional)</label>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Categoria (Opcional)</label>
               <input 
                 v-model="form.category" 
                 :disabled="!canSave"
                 placeholder="Ex: Hardware, Freelance..."
-                class="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3.5 px-4 text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+                class="form-input flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 placeholder:text-slate-400 px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
               />
             </div>
 
             <div class="space-y-2">
-              <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Data da Transação</label>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Data da Transação</label>
               <input 
                 v-model="form.paymentDate" 
                 :disabled="!canSave" 
                 type="datetime-local" 
                 step="1"
-                class="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3 px-4 text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all [color-scheme:dark]"
+                class="form-input flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors [color-scheme:light] dark:[color-scheme:dark]"
               />
             </div>
           </div>
@@ -205,10 +211,10 @@
       </div>
 
       <!-- Modal Footer -->
-      <div class="shrink-0 p-6 border-t border-slate-800 bg-slate-900/50 flex flex-col sm:flex-row gap-4 items-center justify-between backdrop-blur-md">
-        <div v-show="!canSave" class="flex items-center gap-2 px-4 py-2 bg-rose-500/10 border border-rose-500/20 rounded-xl">
+      <div class="shrink-0 p-6 border-t border-slate-200 dark:border-slate-700 bg-[var(--color-bg-body)] dark:bg-slate-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div v-show="!canSave" class="flex items-center gap-2 px-4 py-2 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-lg">
           <i class="fa-solid fa-lock text-rose-500 text-xs"></i>
-          <span class="text-[10px] font-bold text-rose-300 uppercase leading-none">{{ saveTooltip }}</span>
+          <span class="text-[10px] font-bold text-rose-600 dark:text-rose-300 uppercase leading-none">{{ saveTooltip }}</span>
         </div>
         <div v-show="canSave" class="hidden sm:block"></div>
         
@@ -216,14 +222,14 @@
           <button 
             type="button" 
             @click="$emit('close')"
-            class="flex-1 sm:px-8 py-3.5 rounded-2xl font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-all active:scale-95"
+            class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-500"
           >
             Cancelar
           </button>
           <button 
             @click="save"
             :disabled="!canSave"
-            class="flex-[2] sm:px-12 py-3.5 rounded-2xl font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all active:scale-95 disabled:opacity-20 disabled:grayscale disabled:scale-95"
+            class="px-5 py-2.5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 disabled:opacity-50 disabled:grayscale"
           >
             Salvar Transação
           </button>

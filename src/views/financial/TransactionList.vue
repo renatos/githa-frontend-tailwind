@@ -2,7 +2,7 @@
   <div class="space-y-6">
     <!-- Header Actions -->
     <div class="flex items-center justify-between">
-      <h2 class="text-xl font-bold text-slate-200 flex items-center gap-2">
+      <h2 class="text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
         <i class="fa-solid fa-money-bill-transfer text-indigo-500"></i>
         Fluxo Financeiro
       </h2>
@@ -25,7 +25,7 @@
         @row-click="openForm"
       >
         <template #cell-amount="{ value, item }">
-          <span class="font-bold text-base tracking-tight" :class="item.nature === 'INCOME' ? 'text-emerald-400' : 'text-rose-400'">
+          <span class="font-bold text-base tracking-tight" :class="item.nature === 'INCOME' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">
             {{ formatCurrency(value) }}
           </span>
         </template>
@@ -35,8 +35,8 @@
             <span 
               class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-colors shadow-sm"
               :class="value === 'INCOME' 
-                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' 
-                : 'bg-rose-500/10 text-rose-400 border-rose-500/20'"
+                ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20' 
+                : 'bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400 border-rose-200 dark:border-rose-500/20'"
             >
               {{ value === 'INCOME' ? 'Receita' : 'Despesa' }}
             </span>
@@ -45,14 +45,14 @@
 
         <template #cell-status="{ value }">
           <div class="flex">
-             <span 
-              class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-sm"
-              :class="{
-                'bg-emerald-500/10 text-emerald-400 border-emerald-500/10': value === 'PAID',
-                'bg-amber-500/10 text-amber-400 border-amber-500/10': value === 'PENDING',
-                'bg-slate-500/10 text-slate-400 border-slate-500/10': value === 'CANCELLED'
-              }"
-             >
+            <span 
+              class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-colors shadow-sm"
+              :class="value === 'PAID' 
+                ? 'bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-500/20' 
+                : value === 'PENDING'
+                  ? 'bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-500/20'
+                  : 'bg-slate-100 dark:bg-slate-500/10 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-500/20'"
+            >
               {{ statusMap[value] || value }}
             </span>
           </div>
