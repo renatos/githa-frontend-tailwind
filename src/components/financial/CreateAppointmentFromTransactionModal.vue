@@ -1,33 +1,28 @@
 <template>
-  <Teleport to="body">
-    <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
-    <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-lg overflow-hidden flex flex-col shadow-2xl shadow-black/50 animate-in zoom-in-95 duration-300">
-      
-      <!-- Modal Header -->
-      <div class="shrink-0 flex items-center justify-between p-6 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md">
-        <div class="flex items-center gap-3">
-          <div class="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20">
-            <i class="fa-solid fa-calendar-plus text-indigo-400"></i>
-          </div>
-          <div>
-            <h3 class="text-xl font-bold tracking-tight text-white">Gerar Atendimento</h3>
-            <p class="text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-0.5">Vincular Transação</p>
-          </div>
-        </div>
-        <button 
-          @click="$emit('close')" 
-          type="button"
-          class="p-2 rounded-xl text-slate-500 hover:text-white hover:bg-slate-800 transition-all active:scale-90"
-        >
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
+  <BaseModal
+    :show="true"
+    max-width="max-w-lg"
+    @close="$emit('close')"
+  >
+    <template #header-content>
+      <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20">
+        <i class="fa-solid fa-calendar-plus text-indigo-600 dark:text-indigo-400 text-lg"></i>
       </div>
-
-      <form @submit.prevent="submit" class="flex-1 overflow-y-auto p-6 lg:p-8 space-y-6 min-h-0">
-        
-        <!-- Procedimento -->
-        <div class="space-y-2">
-          <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Procedimento *</label>
+      <div class="min-w-0">
+        <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] m-0 text-slate-900 dark:text-slate-100 truncate">
+          Gerar Atendimento
+        </h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Vincular Transação
+        </p>
+      </div>
+    </template>
+    <form @submit.prevent="submit" class="space-y-6">
+      
+      <!-- Procedimento -->
+      <div class="space-y-2">
+        <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Procedimento *</label>
+        <div class="h-12 w-full mt-1">
           <BaseLookup
             v-model="form.serviceId"
             :initial-description="initialServiceName"
@@ -36,10 +31,12 @@
             @select="onServiceSelect"
           />
         </div>
+      </div>
 
-        <!-- Profissional -->
-        <div class="space-y-2">
-          <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Profissional *</label>
+      <!-- Profissional -->
+      <div class="space-y-2">
+        <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Profissional *</label>
+        <div class="h-12 w-full mt-1">
           <BaseLookup
             v-model="form.professionalId"
             :initial-description="initialProfessionalName"
@@ -48,80 +45,82 @@
             @select="onProfessionalSelect"
           />
         </div>
+      </div>
 
-        <!-- Descrição -->
+      <!-- Descrição -->
+      <div class="space-y-2">
+        <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Descrição</label>
+        <div class="relative group mt-1">
+          <i class="fa-solid fa-signature absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-600 group-focus-within:text-indigo-600 transition-colors"></i>
+          <input 
+            v-model="form.description" 
+            placeholder="Descrição do atendimento..."
+            class="form-input flex w-full h-12 rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 placeholder:text-slate-400 pl-11 pr-4 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors text-base font-normal"
+          />
+        </div>
+      </div>
+
+      <!-- Tipo e Desconto -->
+      <div class="grid grid-cols-2 gap-4">
         <div class="space-y-2">
-          <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Descrição</label>
-          <div class="relative group">
-            <i class="fa-solid fa-pen-nib absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-500 transition-colors"></i>
+          <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Tipo</label>
+          <div class="h-12 flex items-center gap-2 px-4 rounded-lg bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 border-dashed text-slate-400 font-bold text-base opacity-70">
+             <i class="fa-solid fa-arrow-up text-emerald-500/50"></i>
+             RECEITA
+          </div>
+        </div>
+        <div class="space-y-2">
+          <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Desconto (%)</label>
+          <div class="relative group mt-1">
+            <i class="fa-solid fa-percent absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-600 group-focus-within:text-indigo-600 transition-colors"></i>
             <input 
-              v-model="form.description" 
-              placeholder="Descrição do atendimento..."
-              class="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3.5 pl-11 pr-4 text-slate-200 placeholder:text-slate-700 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
+              v-model.number="form.discount" 
+              type="number" 
+              step="0.01"
+              class="form-input flex w-full h-12 rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 pl-11 pr-4 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors text-base font-normal"
             />
           </div>
         </div>
+      </div>
 
-        <!-- Tipo e Desconto -->
-        <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-2">
-            <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Tipo</label>
-            <div class="bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3.5 text-slate-600 font-bold flex items-center gap-2 grayscale border-dashed opacity-50">
-               <i class="fa-solid fa-arrow-up text-emerald-500"></i>
-               RECEITA
-            </div>
-          </div>
-          <div class="space-y-2">
-            <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Desconto (%)</label>
-            <div class="relative group">
-              <i class="fa-solid fa-percent absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-500 transition-colors"></i>
-              <input 
-                v-model.number="form.discount" 
-                type="number" 
-                step="0.01"
-                class="w-full bg-slate-950 border border-slate-800 rounded-2xl py-3.5 pl-11 pr-4 text-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all"
-              />
-            </div>
+      <!-- Valores -->
+      <div class="grid grid-flow-row sm:grid-cols-2 gap-4">
+        <div class="space-y-2">
+          <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Valor Procedimento</label>
+          <div class="h-12 flex items-center px-4 rounded-lg bg-slate-50 dark:bg-slate-700/50 border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-400 font-bold tracking-tight text-base">
+             {{ formatCurrency(computedValue) }}
           </div>
         </div>
-
-        <!-- Valores -->
-        <div class="grid grid-cols-2 gap-4">
-          <div class="space-y-2">
-            <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1">Valor Procedimento</label>
-            <div class="bg-slate-950 border border-slate-800 rounded-2xl px-4 py-3.5 text-slate-400 font-black tracking-tight flex items-center gap-2">
-               {{ formatCurrency(computedValue) }}
-            </div>
-          </div>
-          <div class="space-y-2">
-            <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 ml-1 text-indigo-400">Pagamento *</label>
+        <div class="space-y-2">
+          <label class="text-indigo-600 dark:text-indigo-400 text-sm font-medium leading-normal block ml-1 pb-1">Pagamento *</label>
+          <div class="h-12 mt-1">
             <CurrencyInput 
               v-model="form.amount" 
               required
-              class="w-full font-black text-emerald-400"
+              class="flex w-full h-12 rounded-lg text-emerald-600 dark:text-emerald-400 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors text-base font-black"
             />
           </div>
         </div>
-      </form>
-
-      <!-- Modal Footer -->
-      <div class="shrink-0 p-6 border-t border-slate-800 bg-slate-900/50 flex flex-col sm:flex-row gap-3 items-center justify-between backdrop-blur-md">
-        <button 
-          type="button" 
-          @click="$emit('close')"
-          class="w-full sm:flex-1 py-4 rounded-2xl font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white transition-all active:scale-95"
-        >
-          Cancelar
-        </button>
-        <button 
-          @click="submit"
-          :disabled="loading"
-          class="w-full sm:flex-[2] py-4 rounded-2xl font-bold bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 hover:bg-indigo-500 transition-all active:scale-95 disabled:opacity-50"
-        >
-          {{ loading ? 'Salvando...' : 'Gerar Atendimento' }}
-        </button>
       </div>
-    </div>
+    </form>
+
+    <template #footer>
+      <button 
+        type="button" 
+        @click="$emit('close')"
+        class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-500"
+      >
+        Cancelar
+      </button>
+      <button 
+        @click="submit"
+        :disabled="loading"
+        class="px-5 py-2.5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 disabled:opacity-50 disabled:grayscale flex items-center justify-center gap-2"
+      >
+        <i v-if="loading" class="fa-solid fa-circle-notch animate-spin"></i>
+        {{ loading ? 'Salvando...' : 'Gerar Atendimento' }}
+      </button>
+    </template>
 
     <!-- Error Modal Portal -->
     <ErrorModal
@@ -129,19 +128,18 @@
         :show="showError"
         @close="closeError"
     />
-    </div>
-  </Teleport>
+  </BaseModal>
 </template>
 
 <script setup>
 import {ref, computed, onMounted, watch} from 'vue';
+import BaseModal from '../common/BaseModal.vue';
 import BaseLookup from '../common/BaseLookup.vue';
 import CurrencyInput from '../common/CurrencyInput.vue';
 import ErrorModal from '../common/ErrorModal.vue';
 import financialService from '../../services/financialService';
 import {serviceService} from '../../services/serviceService';
 import {professionalService} from '../../services/professionalService';
-import {useEscapeKey} from '../../composables/useEscapeKey';
 
 const props = defineProps({
   transaction: {
@@ -152,15 +150,12 @@ const props = defineProps({
 
 const emit = defineEmits(['close', 'save']);
 
-// Add ESC key support
-useEscapeKey(() => emit('close'));
-
 const loading = ref(false);
 const form = ref({
   serviceId: null,
   professionalId: null,
   discount: 0,
-  amount: null,
+  amount: 0,
   description: ''
 });
 
@@ -184,7 +179,7 @@ onMounted(() => {
     form.value.professionalId = props.transaction.professionalId;
     initialProfessionalName.value = props.transaction.professionalName;
   }
-  form.value.amount = null;
+  form.value.amount = 0;
   form.value.description = `Procedimento - ${props.transaction.clientName || 'Cliente'}`;
 });
 

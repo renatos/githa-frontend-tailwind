@@ -1,34 +1,23 @@
 <template>
-  <Teleport to="body">
-    <div class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
-    <div class="bg-[var(--color-bg-card)] dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col border border-slate-200 dark:border-slate-700 animate-in zoom-in-95 duration-300">
-      
-      <!-- Modal Header -->
-      <div class="shrink-0 flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700 bg-[var(--color-bg-body)] dark:bg-slate-800/50">
-        <div class="flex items-center gap-3">
-          <div class="p-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20">
-            <i class="fa-solid fa-money-bill-transfer text-indigo-600 dark:text-indigo-400"></i>
-          </div>
-          <div>
-            <h3 class="text-xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-              {{ transaction.id ? 'Editar Transação' : 'Nova Transação' }}
-            </h3>
-            <p v-if="transaction.id" class="text-xs text-slate-500 truncate max-w-[200px] md:max-w-none">
-              Ref: {{ transaction.id }}
-            </p>
-          </div>
-        </div>
-        <button 
-          @click="$emit('close')" 
-          type="button"
-          class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg w-8 h-8 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors shrink-0"
-        >
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
+  <BaseModal
+    :show="true"
+    max-width="max-w-4xl"
+    @close="$emit('close')"
+  >
+    <template #header-content>
+      <div class="p-2 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/20">
+        <i class="fa-solid fa-money-bill-transfer text-indigo-600 dark:text-indigo-400 text-lg"></i>
       </div>
-
-      <div class="flex-1 overflow-y-auto p-6 lg:p-10 custom-scrollbar bg-transparent dark:bg-slate-900/50 min-h-0">
-        <form @submit.prevent="save" class="space-y-8 h-full flex flex-col">
+      <div class="min-w-0">
+        <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] m-0 text-slate-900 dark:text-slate-100 truncate">
+          {{ transaction.id ? 'Editar Transação' : 'Nova Transação' }}
+        </h2>
+        <p v-if="transaction.id" class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Ref: {{ transaction.id }}
+        </p>
+      </div>
+    </template>
+    <form @submit.prevent="save" class="space-y-8 flex flex-col h-full">
           
           <!-- Lançamento Mode Selector -->
           <div v-if="!transaction.id" class="flex p-1 bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg">
@@ -49,14 +38,14 @@
 
           <!-- Description Section -->
           <div v-if="launchMode === 'MANUAL'" class="space-y-2">
-            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Descrição</label>
+            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Descrição</label>
             <div class="relative group mt-1">
               <i class="fa-solid fa-signature absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-600 group-focus-within:text-indigo-600 transition-colors"></i>
               <input 
                 v-model="form.description" 
                 :disabled="!canSave"
                 placeholder="Ex: Aluguel mensal, Compra de suprimentos..."
-                class="form-input flex w-full h-12 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 placeholder:text-slate-400 py-3.5 pl-11 pr-4 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors disabled:opacity-50"
+                class="form-input flex w-full h-12 rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 placeholder:text-slate-400 pl-11 pr-4 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors disabled:opacity-50 text-base font-normal"
               />
             </div>
           </div>
@@ -64,7 +53,7 @@
           <!-- SALE MODE: Client Selection -->
           <div v-if="launchMode === 'SALE'" class="space-y-6">
             <div class="space-y-2">
-              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Cliente</label>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Cliente</label>
               <div class="h-12 w-full mt-1">
                 <BaseLookup
                   v-model="form.clientId"
@@ -92,9 +81,8 @@
             />
           </div>
 
-          <!-- Account Group Selection (Manual Mode) -->
           <div v-if="!isAppointmentTransaction && launchMode === 'MANUAL'" class="space-y-2">
-            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Grupo de Contas</label>
+            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1">Grupo de Contas</label>
             <div class="h-12 w-full mt-1">
               <BaseLookup
                 v-model="form.accountGroupId"
@@ -107,9 +95,8 @@
             </div>
           </div>
 
-          <!-- Payment Info (Visible for Income) -->
           <div v-if="form.nature === 'INCOME'" class="space-y-2">
-            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Forma de Pagamento</label>
+            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1">Forma de Pagamento</label>
             <div class="h-12 w-full mt-1">
               <BaseLookup
                 v-model="form.paymentMethodId"
@@ -125,15 +112,15 @@
           <!-- Financial Details Row -->
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
              <div v-if="launchMode === 'MANUAL'" class="space-y-2">
-              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Natureza</label>
-              <div class="form-input flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-3 font-semibold items-center gap-2 cursor-not-allowed">
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1">Natureza</label>
+              <div class="form-input flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-500 dark:text-slate-400 border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700/50 px-4 py-3 font-semibold items-center gap-2 cursor-not-allowed text-base">
                 <i class="fa-solid" :class="form.nature === 'INCOME' ? 'fa-arrow-up text-emerald-600 dark:text-emerald-500' : 'fa-arrow-down text-rose-600 dark:text-rose-500'"></i>
                 {{ form.nature === 'INCOME' ? 'Receita' : 'Despesa' }}
               </div>
             </div>
 
             <div class="space-y-2">
-              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Valor Total</label>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1">Valor Total</label>
               <div class="relative group mt-1">
                 <CurrencyInput 
                   v-model="form.amount" 
@@ -144,11 +131,11 @@
             </div>
 
             <div class="space-y-2">
-              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Status</label>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-0 ml-1 block">Status</label>
               <select 
                 v-model="form.status" 
                 :disabled="!canSave"
-                class="form-select flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 font-bold px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors cursor-pointer"
+                class="form-select flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors cursor-pointer text-base font-normal"
               >
                 <option v-for="status in transactionStatuses" :key="status.name" :value="status.name">
                   {{ status.description }}
@@ -165,7 +152,7 @@
               </div>
               <div>
                 <span class="text-[10px] uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400 block">Vínculo</span>
-                <span class="text-sm font-semibold text-slate-900 dark:text-slate-200">Vinculado ao Agendamento #{{ form.appointmentId }}</span>
+                <span class="text-sm font-semibold text-slate-900 dark:text-slate-100">Vinculado ao Agendamento #{{ form.appointmentId }}</span>
               </div>
             </div>
             <button 
@@ -187,65 +174,73 @@
           <!-- Secondary Details Row -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Categoria (Opcional)</label>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Categoria (Opcional)</label>
               <input 
                 v-model="form.category" 
                 :disabled="!canSave"
                 placeholder="Ex: Hardware, Freelance..."
-                class="form-input flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 placeholder:text-slate-400 px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors"
+                class="form-input flex w-full h-12 mt-1 rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 placeholder:text-slate-400 px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors text-base font-normal"
               />
             </div>
 
             <div class="space-y-2">
-              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2 ml-1">Data da Transação</label>
+              <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Data da Transação</label>
               <input 
                 v-model="form.paymentDate" 
                 :disabled="!canSave" 
                 type="datetime-local" 
                 step="1"
-                class="form-input flex w-full h-12 mt-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors [color-scheme:light] dark:[color-scheme:dark]"
+                class="form-input flex w-full h-12 mt-1 rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-3 outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors text-base font-normal [color-scheme:light] dark:[color-scheme:dark]"
               />
             </div>
           </div>
-        </form>
-      </div>
 
-      <!-- Modal Footer -->
-      <div class="shrink-0 p-6 border-t border-slate-200 dark:border-slate-700 bg-[var(--color-bg-body)] dark:bg-slate-800 flex flex-col sm:flex-row gap-4 items-center justify-between">
-        <div v-show="!canSave" class="flex items-center gap-2 px-4 py-2 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-lg">
-          <i class="fa-solid fa-lock text-rose-500 text-xs"></i>
-          <span class="text-[10px] font-bold text-rose-600 dark:text-rose-300 uppercase leading-none">{{ saveTooltip }}</span>
-        </div>
-        <div v-show="canSave" class="hidden sm:block"></div>
-        
-        <div class="flex items-center gap-3 w-full sm:w-auto">
-          <button 
-            type="button" 
-            @click="$emit('close')"
-            class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-500"
-          >
-            Cancelar
-          </button>
-          <button 
-            @click="save"
-            :disabled="!canSave"
-            class="px-5 py-2.5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 disabled:opacity-50 disabled:grayscale"
-          >
-            Salvar Transação
-          </button>
-        </div>
+          <!-- Description (Always visible for SALE, optional or notes) -->
+          <div class="space-y-2">
+            <label class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal block ml-1 pb-1">Observações / Notas</label>
+            <textarea 
+              v-model="form.description" 
+              :disabled="!canSave"
+              rows="3"
+              placeholder="Notas adicionais sobre esta transação..."
+              class="form-input flex w-full mt-1 rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 px-4 py-3 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 transition-colors text-base font-normal resize-none"
+            ></textarea>
+          </div>
+    </form>
+
+    <template #footer>
+      <div v-show="!canSave" class="flex items-center gap-2 px-4 py-2 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/20 rounded-lg">
+        <i class="fa-solid fa-lock text-rose-500 text-xs"></i>
+        <span class="text-[10px] font-bold text-rose-600 dark:text-rose-300 uppercase leading-none">{{ saveTooltip }}</span>
       </div>
-    </div>
-  </div>
-</Teleport>
+      <div v-show="canSave" class="hidden sm:block"></div>
+      
+      <div class="flex items-center gap-3 w-full sm:w-auto">
+        <button 
+          type="button" 
+          @click="$emit('close')"
+          class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-500"
+        >
+          Cancelar
+        </button>
+        <button 
+          @click="save"
+          :disabled="!canSave"
+          class="px-5 py-2.5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 disabled:opacity-50 disabled:grayscale"
+        >
+          Salvar Transação
+        </button>
+      </div>
+    </template>
+  </BaseModal>
 </template>
 
 
 <script setup>
 import {ref, defineProps, defineEmits, onMounted, computed, watch} from 'vue';
+import BaseModal from '../common/BaseModal.vue';
 import financialService from '../../services/financialService';
 import {authService} from '../../services/authService';
-import {useEscapeKey} from '../../composables/useEscapeKey';
 import CurrencyInput from '../common/CurrencyInput.vue';
 import BaseLookup from '../common/BaseLookup.vue';
 import paymentMethodService from '../../services/paymentMethodService';
@@ -266,9 +261,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close', 'save', 'view-appointment']);
-
-// Add ESC key support
-useEscapeKey(() => emit('close'));
 
 const isAdmin = ref(false);
 const originalStatus = ref('');

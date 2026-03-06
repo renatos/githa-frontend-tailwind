@@ -119,7 +119,7 @@
             <div class="relative group">
               <select 
                 v-model="newItem.type" 
-                class="appearance-none bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-xl pl-3 pr-8 py-2 md:py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none w-full cursor-pointer transition-colors"
+                class="appearance-none bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg pl-3 pr-8 py-2 md:py-2.5 text-xs font-bold text-slate-700 dark:text-slate-100 focus:ring-1 focus:ring-indigo-600 focus:border-indigo-600 outline-none w-full cursor-pointer transition-colors"
                 @change="$emit('typeChange', newItem.type)"
               >
                 <option v-for="type in saleItemTypes" :key="type.name" :value="type.name">
@@ -176,7 +176,7 @@
               type="number" 
               min="1" 
               inputmode="numeric"
-              class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg p-2 md:p-2.5 text-center text-sm md:text-sm text-indigo-600 dark:text-indigo-400 font-bold focus:ring-1 focus:ring-indigo-500 outline-none border-dashed transition-colors hover:border-indigo-400"
+              class="w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg p-2 md:p-2.5 text-center text-sm md:text-sm text-indigo-600 dark:text-indigo-400 font-bold focus:ring-1 focus:ring-indigo-500 outline-none transition-colors hover:border-indigo-400"
             >
           </div>
 
@@ -185,7 +185,7 @@
             <span class="md:hidden block text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">Unitário</span>
             <CurrencyInput 
               v-model="newItem.unitPrice" 
-              class="w-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 rounded-lg p-2 md:p-2.5 text-right text-sm md:text-sm font-bold focus:ring-1 focus:ring-indigo-500 outline-none transition-colors"
+              class="w-full bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg p-2 md:p-2.5 text-right text-sm md:text-sm font-bold focus:ring-1 focus:ring-indigo-500 outline-none transition-colors"
             />
           </div>
 
