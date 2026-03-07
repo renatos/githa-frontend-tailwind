@@ -189,6 +189,7 @@ import {serviceService} from '../services/serviceService';
 import {authService} from '../services/authService';
 import {enumService} from '../services/enumService';
 import BaseLookup from './common/BaseLookup.vue';
+import { confirmBridge } from '../services/confirmBridge';
 import {useModal} from '../composables/useModal';
 import {useEscapeKey} from '../composables/useEscapeKey';
 import CurrencyInput from './common/CurrencyInput.vue';
@@ -418,7 +419,11 @@ const onEditClient = async (id) => {
     showClientForm.value = true;
   } catch (e) {
     console.error("Failed to fetch client for editing", e);
-    alert("Erro ao carregar dados do cliente");
+    confirmBridge.alert({
+      title: 'Erro ao Carregar',
+      message: 'Não foi possível carregar os dados do cliente.',
+      type: 'danger'
+    });
   }
 };
 
@@ -437,7 +442,11 @@ const onClientSaved = async (updatedClientData) => {
     showClientForm.value = false;
   } catch (e) {
     console.error("Failed to save client", e);
-    alert("Erro ao salvar cliente");
+    confirmBridge.alert({
+      title: 'Erro ao Salvar',
+      message: 'Não foi possível salvar os dados do cliente.',
+      type: 'danger'
+    });
   }
 };
 
@@ -448,7 +457,11 @@ const onEditProfessional = async (id) => {
     showProfessionalForm.value = true;
   } catch (e) {
     console.error("Failed to fetch professional", e);
-    alert("Erro ao carregar dados do profissional");
+    confirmBridge.alert({
+      title: 'Erro ao Carregar',
+      message: 'Não foi possível carregar os dados do profissional.',
+      type: 'danger'
+    });
   }
 };
 
@@ -467,7 +480,11 @@ const onProfessionalSaved = async (data) => {
     showProfessionalForm.value = false;
   } catch (e) {
     console.error("Failed to save professional", e);
-    alert("Erro ao salvar profissional");
+    confirmBridge.alert({
+      title: 'Erro ao Salvar',
+      message: 'Não foi possível salvar os dados do profissional.',
+      type: 'danger'
+    });
   }
 };
 
@@ -478,7 +495,11 @@ const onEditService = async (id) => {
     showServiceForm.value = true;
   } catch (e) {
     console.error("Failed to fetch service", e);
-    alert("Erro ao carregar dados do serviço");
+    confirmBridge.alert({
+      title: 'Erro ao Carregar',
+      message: 'Não foi possível carregar os dados do serviço.',
+      type: 'danger'
+    });
   }
 };
 
@@ -502,7 +523,11 @@ const onServiceSaved = async (data) => {
     showServiceForm.value = false;
   } catch (e) {
     console.error("Failed to save service", e);
-    alert("Erro ao salvar serviço");
+    confirmBridge.alert({
+      title: 'Erro ao Salvar',
+      message: 'Não foi possível salvar os dados do serviço.',
+      type: 'danger'
+    });
   }
 };
 </script>

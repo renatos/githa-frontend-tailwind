@@ -161,6 +161,7 @@ import GoogleContactsModal from './common/GoogleContactsModal.vue';
 import AiContextBadge from './common/AiContextBadge.vue';
 import { clientService } from '../services/clientService';
 import { formatShortName, formatPhone } from '../utils/formatters';
+import { confirmBridge } from '../services/confirmBridge';
 import api from '../services/api';
 
 defineEmits(['new', 'edit', 'delete']);
@@ -173,10 +174,18 @@ const handleImportGoogle = async (clients) => {
         await clientService.createBatch(clients);
         showImportModal.value = false;
         refresh();
-        alert('Contatos importados com sucesso!');
+        confirmBridge.alert({
+          title: 'Importação Concluída',
+          message: 'Os contatos foram importados com sucesso!',
+          type: 'info'
+        });
     } catch (e) {
         console.error(e);
-        alert('Erro ao importar contatos.');
+        confirmBridge.alert({
+          title: 'Erro na Importação',
+          message: 'Ocorreu um erro ao tentar importar os contatos do Google.',
+          type: 'danger'
+        });
     }
 };
 

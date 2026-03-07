@@ -48,6 +48,7 @@ import GenericTable from '../common/GenericTable.vue';
 import { anamnesisService } from '../../services/anamnesisService';
 import { enumService } from '../../services/enumService';
 import { toastBridge } from '../../services/toastBridge';
+import { confirmBridge } from '../../services/confirmBridge';
 import { formatDate } from '../../utils/formatters';
 
 const props = defineProps({
@@ -114,33 +115,39 @@ const refresh = () => {
 defineExpose({ refresh });
 
 const deleteItem = async (item) => {
-  if (confirm('Tem certeza que deseja excluir esta anamnese?')) {
-    try {
-      await anamnesisService.delete(props.clientId, item.id);
-      
-      const toast = toastBridge.getToast();
-      if (toast) {
-        toast.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: 'Anamnese excluída com sucesso!',
-          life: 3000
-        });
-      }
-      refresh();
-    } catch (error) {
-      console.error('Erro ao excluir anamnese:', error);
-      const toast = toastBridge.getToast();
-      if (toast) {
-        toast.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Não foi possível excluir a anamnese',
-          life: 3000
-        });
+  confirmBridge.confirm({
+    title: 'Excluir Anamnese',
+    message: 'Tem certeza que deseja excluir esta anamnese?',
+    type: 'danger',
+    confirmLabel: 'Excluir',
+    onConfirm: async () => {
+      try {
+        await anamnesisService.delete(props.clientId, item.id);
+        
+        const toast = toastBridge.getToast();
+        if (toast) {
+          toast.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Anamnese excluída com sucesso!',
+            life: 3000
+          });
+        }
+        refresh();
+      } catch (error) {
+        console.error('Erro ao excluir anamnese:', error);
+        const toast = toastBridge.getToast();
+        if (toast) {
+          toast.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Não foi possível excluir a anamnese',
+            life: 3000
+          });
+        }
       }
     }
-  }
+  });
 };
 
 const formatType = (type) => {

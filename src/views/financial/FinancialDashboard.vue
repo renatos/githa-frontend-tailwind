@@ -157,6 +157,8 @@ import financialService from '../../services/financialService';
 import { appointmentService } from '../../services/appointmentService';
 import TransactionList from './TransactionList.vue';
 import AppointmentForm from '../../components/AppointmentForm.vue';
+import { confirmBridge } from '../../services/confirmBridge';
+import { toastBridge } from '../../services/toastBridge';
 
 const viewMode = ref('MONTH'); // 'MONTH' or 'DAY'
 
@@ -306,7 +308,11 @@ const openAppointment = async (id) => {
         showAppointmentForm.value = true;
     } catch (error) {
         console.error('Error loading appointment:', error);
-        alert('Erro ao carregar agendamento');
+        confirmBridge.alert({
+          title: 'Erro de Carregamento',
+          message: 'Não foi possível carregar os dados do agendamento.',
+          type: 'danger'
+        });
     }
 };
 
@@ -319,17 +325,21 @@ const saveAppointment = async (data) => {
   try {
     if (data.id) {
       await appointmentService.update(data.id, data);
-      alert('Agendamento atualizado com sucesso!');
+      toastBridge.getToast().add({ severity: 'success', summary: 'Sucesso', detail: 'Agendamento atualizado com sucesso!', life: 3000 });
     } else {
       await appointmentService.create(data);
-      alert('Agendamento criado com sucesso!');
+      toastBridge.getToast().add({ severity: 'success', summary: 'Sucesso', detail: 'Agendamento criado com sucesso!', life: 3000 });
     }
     closeAppointmentForm();
     loadAllData();
     transactionListRef.value?.loadData();
   } catch (error) {
     console.error('Error saving appointment:', error);
-    alert('Erro ao salvar agendamento.');
+    confirmBridge.alert({
+      title: 'Erro ao Salvar',
+      message: 'Ocorreu um erro ao tentar salvar o agendamento.',
+      type: 'danger'
+    });
   }
 };
 </script>

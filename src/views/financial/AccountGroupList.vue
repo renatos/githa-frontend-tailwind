@@ -60,6 +60,7 @@ import { ref } from 'vue';
 import GenericTable from '@/components/common/GenericTable.vue';
 import AccountGroupForm from '@/components/financial/AccountGroupForm.vue';
 import financialService from '@/services/financialService';
+import { confirmBridge } from '@/services/confirmBridge';
 
 const tableRef = ref(null);
 const showForm = ref(false);
@@ -120,15 +121,25 @@ const onSave = () => {
 };
 
 const confirmDelete = async (group) => {
-  if (confirm(`Tem certeza que deseja excluir o grupo "${group.name}"?`)) {
-    try {
-      await financialService.deleteAccountGroup(group.id);
-      tableRef.value?.loadData();
-    } catch (error) {
-      console.error('Error deleting account group:', error);
-      alert('Erro ao excluir grupo. Verifique se existem transações vinculadas.');
+  confirmBridge.confirm({
+    title: 'Excluir Grupo',
+    message: `Tem certeza que deseja excluir o grupo "${group.name}"?`,
+    type: 'danger',
+    confirmLabel: 'Excluir',
+    onConfirm: async () => {
+      try {
+        await financialService.deleteAccountGroup(group.id);
+        tableRef.value?.loadData();
+      } catch (error) {
+        console.error('Error deleting account group:', error);
+        confirmBridge.alert({
+          title: 'Erro ao Excluir',
+          message: 'Erro ao excluir grupo. Verifique se existem transações vinculadas.',
+          type: 'danger'
+        });
+      }
     }
-  }
+  });
 };
 </script>
 

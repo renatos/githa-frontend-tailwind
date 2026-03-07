@@ -50,6 +50,7 @@
 import {ref, defineEmits, defineExpose} from 'vue';
 import GenericTable from './common/GenericTable.vue';
 import {userService} from '../services/userService';
+import { confirmBridge } from '../services/confirmBridge';
 
 defineEmits(['new', 'edit', 'delete']);
 
@@ -97,7 +98,11 @@ const reactivateUser = async (id) => {
     refresh();
   } catch (e) {
     console.error("Failed to reactivate", e);
-    alert("Erro ao reativar usuário");
+    confirmBridge.alert({
+      title: 'Erro ao Reativar',
+      message: 'Não foi possível reativar o usuário selecionado.',
+      type: 'danger'
+    });
   }
 };
 

@@ -118,6 +118,7 @@ import CreateAppointmentFromTransactionModal from '../../components/financial/Cr
 import financialService from '../../services/financialService';
 import { authService } from '../../services/authService';
 import { enumService } from '../../services/enumService';
+import { confirmBridge } from '../../services/confirmBridge';
 
 const props = defineProps({
   month: {
@@ -254,18 +255,24 @@ const saveItem = async (data) => {
   }
 };
 
-const deleteItem = async (id) => {
-  const message = 'Tem certeza que deseja excluir esta transação?\n\n' +
-    'Se esta transação estiver vinculada a uma venda, a venda também será removida permanentemente.';
-  if (confirm(message)) {
-    try {
-      await financialService.deleteTransaction(id);
-      tableRef.value?.loadData();
-      emit('change');
-    } catch (error) {
-      console.error('Error deleting transaction:', error);
-    }
-  }
+const deleteItem = async (item) => {
+    confirmBridge.confirm({
+        title: 'Excluir Transação',
+        message: 'Tem certeza que deseja excluir esta transação?\n\nSe esta transação estiver vinculada a uma venda, a venda também será removida permanentemente.',
+        type: 'danger',
+        confirmLabel: 'Excluir',
+        onConfirm: async () => {
+            try {
+                await financialService.deleteTransaction(item.id);
+                toastBridge.getToast().add({ severity: 'success', summary: 'Sucesso', detail: 'Transação excluída com sucesso!', life: 3000 });
+                tableRef.value?.loadData();
+                emit('change');
+            } catch (error) {
+                console.error('Error deleting transaction:', error);
+                toastBridge.getToast().add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir transação.', life: 3000 });
+            }
+        }
+    });
 };
 
 const openAppointmentModal = (item) => {

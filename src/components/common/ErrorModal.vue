@@ -4,6 +4,7 @@
     :title="title"
     icon="fa-solid fa-triangle-exclamation"
     @close="close"
+    :zIndex="10001"
   >
     <div class="modal-body p-2">
       <p class="text-slate-900 dark:text-slate-100 text-base leading-relaxed mb-4">{{ message }}</p>

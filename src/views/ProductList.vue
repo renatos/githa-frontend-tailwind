@@ -84,6 +84,7 @@ import { ref } from 'vue';
 import GenericTable from '@/components/common/GenericTable.vue';
 import ProductForm from '@/components/ProductForm.vue';
 import productService from '@/services/productService';
+import { confirmBridge } from '@/services/confirmBridge';
 
 const tableRef = ref(null);
 const showForm = ref(false);
@@ -165,15 +166,25 @@ const onSave = () => {
 };
 
 const confirmDelete = async (item) => {
-  if (confirm(`Tem certeza que deseja excluir "${item.name}"?`)) {
-    try {
-      await productService.delete(item.id);
-      tableRef.value?.loadData();
-    } catch (error) {
-      console.error('Error deleting product:', error);
-      alert('Erro ao excluir produto. Verifique se existem vendas vinculadas.');
+  confirmBridge.confirm({
+    title: 'Excluir Produto',
+    message: `Tem certeza que deseja excluir "${item.name}"?`,
+    type: 'danger',
+    confirmLabel: 'Excluir',
+    onConfirm: async () => {
+      try {
+        await productService.delete(item.id);
+        tableRef.value?.loadData();
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        confirmBridge.alert({
+          title: 'Erro ao Excluir',
+          message: 'Erro ao excluir produto. Verifique se existem vendas vinculadas.',
+          type: 'danger'
+        });
+      }
     }
-  }
+  });
 };
 </script>
 

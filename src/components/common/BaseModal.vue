@@ -9,7 +9,9 @@
       leave-from-class="opacity-100"
       leave-to-class="opacity-0"
     >
-      <div v-if="show" class="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+      <div v-if="show" 
+           class="fixed inset-0 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm"
+           :style="{ zIndex: zIndex }">
         
         <!-- Modal Backdrop Click Area -->
         <div class="absolute inset-0" @click="closeOnBackdrop && $emit('close')"></div>
@@ -92,7 +94,8 @@ const props = defineProps({
   maxWidth: { type: String, default: 'max-w-lg' }, // e.g., max-w-lg, max-w-2xl, max-w-4xl
   closeOnBackdrop: { type: Boolean, default: true },
   hFull: { type: Boolean, default: false }, // If true, takes more height on mobile
-  bodyPadding: { type: Boolean, default: true }
+  bodyPadding: { type: Boolean, default: true },
+  zIndex: { type: Number, default: 9999 }
 });
 
 const emit = defineEmits(['close']);

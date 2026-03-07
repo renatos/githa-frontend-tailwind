@@ -56,6 +56,7 @@ import { ref } from 'vue';
 import GenericTable from '@/components/common/GenericTable.vue';
 import PaymentMethodForm from '@/components/financial/PaymentMethodForm.vue';
 import paymentMethodService from '@/services/paymentMethodService';
+import { confirmBridge } from '@/services/confirmBridge';
 
 const tableRef = ref(null);
 const showForm = ref(false);
@@ -122,15 +123,25 @@ const onSave = () => {
 };
 
 const confirmDelete = async (item) => {
-  if (confirm(`Tem certeza que deseja excluir "${item.name}"?`)) {
-    try {
-      await paymentMethodService.delete(item.id);
-      tableRef.value?.loadData();
-    } catch (error) {
-      console.error('Error deleting payment method:', error);
-      alert('Erro ao excluir. Verifique se existem registros vinculados.');
+  confirmBridge.confirm({
+    title: 'Excluir Forma de Pagamento',
+    message: `Tem certeza que deseja excluir "${item.name}"?`,
+    type: 'danger',
+    confirmLabel: 'Excluir',
+    onConfirm: async () => {
+      try {
+        await paymentMethodService.delete(item.id);
+        tableRef.value?.loadData();
+      } catch (error) {
+        console.error('Error deleting payment method:', error);
+        confirmBridge.alert({
+          title: 'Erro ao Excluir',
+          message: 'Erro ao excluir. Verifique se existem registros vinculados.',
+          type: 'danger'
+        });
+      }
     }
-  }
+  });
 };
 </script>
 

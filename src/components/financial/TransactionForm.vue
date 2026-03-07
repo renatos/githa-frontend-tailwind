@@ -241,6 +241,7 @@ import {ref, defineProps, defineEmits, onMounted, computed, watch} from 'vue';
 import BaseModal from '../common/BaseModal.vue';
 import financialService from '../../services/financialService';
 import {authService} from '../../services/authService';
+import { confirmBridge } from '../../services/confirmBridge';
 import CurrencyInput from '../common/CurrencyInput.vue';
 import BaseLookup from '../common/BaseLookup.vue';
 import paymentMethodService from '../../services/paymentMethodService';
@@ -464,13 +465,21 @@ const onPaymentMethodSelect = (item) => {
 
 const save = async () => {
   if (form.value.status === 'PAID' && !form.value.accountGroupId && !form.value.appointmentId && launchMode.value === 'MANUAL') {
-    alert('Selecione um Grupo de Contas para transações Pagas.');
+    confirmBridge.alert({
+      title: 'Grupo de Contas Obrigatório',
+      message: 'Selecione um Grupo de Contas para transações Pagas.',
+      type: 'warning'
+    });
     return;
   }
 
   if (launchMode.value === 'MANUAL') {
     if (!form.value.description) {
-      alert('Descrição é obrigatória.');
+      confirmBridge.alert({
+        title: 'Descrição Obrigatória',
+        message: 'A descrição é obrigatória para lançamentos manuais.',
+        type: 'warning'
+      });
       return;
     }
     emit('save', form.value);
@@ -478,8 +487,14 @@ const save = async () => {
   }
 
   if (launchMode.value === 'SALE') {
-    if (!form.value.clientId) { alert('Cliente é obrigatório.'); return; }
-    if (saleItems.value.length === 0) { alert('Adicione pelo menos um item.'); return; }
+    if (!form.value.clientId) { 
+      confirmBridge.alert({ title: 'Campo Obrigatório', message: 'O cliente é obrigatório para realizar uma venda.', type: 'warning' }); 
+      return; 
+    }
+    if (saleItems.value.length === 0) { 
+      confirmBridge.alert({ title: 'Nenhum Item Adicionado', message: 'Adicione pelo menos um produto ou serviço à venda.', type: 'warning' }); 
+      return; 
+    }
 
     try {
       const payload = {
@@ -509,7 +524,11 @@ const save = async () => {
       await saleService.launchSale(payload);
       emit('save', {refresh: true});
     } catch (error) {
-      alert('Erro ao lançar venda: ' + (error.response?.data?.message || error.message));
+      confirmBridge.alert({
+        title: 'Erro ao Lançar Venda',
+        message: error.response?.data?.message || error.message,
+        type: 'danger'
+      });
     }
   }
 };

@@ -14,11 +14,9 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@primevue/themes": "^4.5.4",
     "axios": "^1.13.2",
+    "lucide-vue-next": "^0.577.0",
     "marked": "^17.0.3",
-    "primeicons": "^7.0.0",
-    "primevue": "^4.5.4",
     "vue": "^3.5.24",
     "vue-currency-input": "^3.2.2",
     "vue-router": "^4.6.4"

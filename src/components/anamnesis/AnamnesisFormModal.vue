@@ -2,8 +2,9 @@
   <BaseModal
     :show="true"
     @close="$emit('close')"
-    max-width="max-w-3xl"
-    :body-padding="false"
+    :maxWidth="entity?.id ? 'max-w-2xl' : 'max-w-lg'"
+    :bodyPadding="false"
+    :zIndex="10000"
   >
     <template #header-content>
       <div class="flex items-center gap-4 min-w-0">
@@ -143,6 +144,7 @@ import { enumService } from '../../services/enumService';
 import { anamnesisService } from '../../services/anamnesisService';
 import { clientService } from '../../services/clientService';
 import { toastBridge } from '../../services/toastBridge';
+import { confirmBridge } from '../../services/confirmBridge';
 import { useModal } from '../../composables/useModal';
 
 const props = defineProps({
@@ -218,7 +220,11 @@ onMounted(async () => {
          form.value = { ...baseFields, ...(details || {}) };
        } catch(error) {
          console.error('Failed to fetch full anamnesis details', error);
-         alert('Erro ao carregar detalhes da ficha');
+         confirmBridge.alert({
+           title: 'Erro de Carregamento',
+           message: 'Não foi possível carregar os detalhes da ficha de anamnese.',
+           type: 'danger'
+         });
        }
     } else {
        selectedType.value = props.entity.type;
@@ -294,7 +300,11 @@ const save = async () => {
     emit('save');
   } catch (error) {
     console.error('Error saving anamnesis:', error);
-    alert('Erro ao salvar ficha de anamnese.');
+    confirmBridge.alert({
+      title: 'Erro ao Salvar',
+      message: 'Ocorreu um erro ao tentar salvar a ficha de anamnese.',
+      type: 'danger'
+    });
   }
 };
 </script>

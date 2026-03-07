@@ -85,6 +85,7 @@ import GenericTable from '../components/common/GenericTable.vue';
 import ClientForm from '../components/ClientForm.vue';
 import api from '../services/api';
 import { clientService } from '../services/clientService';
+import { confirmBridge } from '../services/confirmBridge';
 import {formatCurrency, formatDate} from '../utils/formatters';
 
 const tableRef = ref(null);
@@ -159,7 +160,11 @@ const recalculate = async () => {
     await api.post('/reports/client-statistics/recalculate');
     refresh();
   } catch (e) {
-    alert('Erro ao recalcular');
+    confirmBridge.alert({
+      title: 'Erro no Recálculo',
+      message: 'Ocorreu um erro ao tentar recalcular as estatísticas.',
+      type: 'danger'
+    });
   } finally {
     recalculating.value = false;
   }
