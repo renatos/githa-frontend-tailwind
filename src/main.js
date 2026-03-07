@@ -5,7 +5,6 @@ import Material from '@primevue/themes/material';
 import ToastService from 'primevue/toastservice';
 import './assets/base.css'
 import './assets/forms.css'
-import './assets/modal.css'
 import App from './App.vue'
 import router from './router'
 import { configService } from './services/configService'

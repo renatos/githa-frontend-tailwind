@@ -1,5 +1,6 @@
 <template>
   <Teleport to="body">
+    <!-- Backdrop Transition -->
     <Transition
       enter-active-class="transition duration-300 ease-out"
       enter-from-class="opacity-0"
@@ -13,8 +14,9 @@
         <!-- Modal Backdrop Click Area -->
         <div class="absolute inset-0" @click="closeOnBackdrop && $emit('close')"></div>
 
-        <!-- Modal Container -->
+        <!-- Modal Container Transition -->
         <Transition
+          appear
           enter-active-class="transition duration-300 ease-out"
           enter-from-class="opacity-0 scale-95 translate-y-4"
           enter-to-class="opacity-100 scale-100 translate-y-0"
@@ -35,7 +37,7 @@
                     <i :class="[icon, 'text-indigo-600 dark:text-indigo-400 text-lg']"></i>
                   </div>
                   <div class="min-w-0">
-                    <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] m-0 text-slate-900 dark:text-slate-100 truncate">
+                    <h2 v-if="title" class="text-lg font-bold leading-tight tracking-[-0.015em] m-0 text-slate-900 dark:text-slate-100 truncate">
                       {{ title }}
                     </h2>
                     <p v-if="subtitle" class="text-[10px] uppercase font-bold tracking-widest text-slate-500 mt-1">
@@ -53,9 +55,17 @@
               </button>
             </header>
 
+            <!-- Sub-header (e.g. Tabs) -->
+            <div v-if="$slots['sub-header']" class="shrink-0 border-b border-slate-200 dark:border-slate-700">
+              <slot name="sub-header"></slot>
+            </div>
+
             <!-- Modal Content & Forms -->
             <div class="flex-1 flex flex-col min-h-0">
-              <div class="overflow-y-auto p-6 md:p-8 flex-1 bg-transparent dark:bg-slate-900/50 custom-scrollbar">
+              <div 
+                class="overflow-y-auto flex-1 bg-transparent dark:bg-slate-900/5 custom-scrollbar"
+                :class="bodyPadding ? 'p-6 md:p-8' : ''"
+              >
                 <slot></slot>
               </div>
               
@@ -81,7 +91,8 @@ const props = defineProps({
   icon: { type: String, default: '' },
   maxWidth: { type: String, default: 'max-w-lg' }, // e.g., max-w-lg, max-w-2xl, max-w-4xl
   closeOnBackdrop: { type: Boolean, default: true },
-  hFull: { type: Boolean, default: false } // If true, takes more height on mobile
+  hFull: { type: Boolean, default: false }, // If true, takes more height on mobile
+  bodyPadding: { type: Boolean, default: true }
 });
 
 const emit = defineEmits(['close']);

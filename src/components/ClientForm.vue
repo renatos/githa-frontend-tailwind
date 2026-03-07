@@ -1,65 +1,68 @@
 <template>
-  <div class="fixed inset-0 z-[1050] bg-slate-900/50 flex items-center justify-center p-4 backdrop-blur-sm" @click.self="$emit('close')">
-    <div class="bg-[var(--color-bg-card)] dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-[800px] flex flex-col max-h-[90vh] overflow-hidden border border-slate-200 dark:border-slate-700">
-      
-      <header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 px-6 py-4 bg-[var(--color-bg-body)] dark:bg-slate-800/50">
-        <div class="flex items-center gap-4 min-w-0">
-          <span class="material-symbols-outlined text-[24px] shrink-0"
-                :class="form.personalData?.gender === 'FEMALE' ? 'text-pink-400' : form.personalData?.gender === 'MALE' ? 'text-blue-400' : 'text-slate-900 dark:text-slate-100'">person_edit</span>
-          <div class="min-w-0">
-            <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] m-0 text-slate-900 dark:text-slate-100 truncate">
-              {{ form.id ? firstName : 'Novo Cliente' }}
-            </h2>
-            <div v-if="form.id" class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
-              <span v-if="clientAge" class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[14px]">cake</span>
-                {{ clientAge }} anos
-              </span>
-              <span v-if="clientSince" class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                <span class="material-symbols-outlined text-[14px]">calendar_month</span>
-                Cliente desde {{ clientSince }}
-              </span>
-              <span v-if="form.status" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide"
-                    :class="headerStatusClass">
-                <span class="w-1.5 h-1.5 rounded-full" :class="headerStatusDotClass"></span>
-                {{ headerStatusLabel }}
-              </span>
-            </div>
+  <BaseModal
+    :show="true"
+    title="Cliente"
+    @close="$emit('close')"
+    maxWidth="max-w-4xl"
+    :bodyPadding="false"
+  >
+    <template #header-content>
+      <div class="flex items-center gap-4 min-w-0">
+        <span class="material-symbols-outlined text-[24px] shrink-0"
+              :class="form.personalData?.gender === 'FEMALE' ? 'text-pink-400' : form.personalData?.gender === 'MALE' ? 'text-blue-400' : 'text-slate-900 dark:text-slate-100'">person_edit</span>
+        <div class="min-w-0">
+          <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] m-0 text-slate-900 dark:text-slate-100 truncate">
+            {{ form.id ? firstName : 'Novo Cliente' }}
+          </h2>
+          <div v-if="form.id" class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1">
+            <span v-if="clientAge" class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">cake</span>
+              {{ clientAge }} anos
+            </span>
+            <span v-if="clientSince" class="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">calendar_month</span>
+              Cliente desde {{ clientSince }}
+            </span>
+            <span v-if="form.status" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide"
+                  :class="headerStatusClass">
+              <span class="w-1.5 h-1.5 rounded-full" :class="headerStatusDotClass"></span>
+              {{ headerStatusLabel }}
+            </span>
           </div>
         </div>
-        <button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg w-8 h-8 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors shrink-0" @click="$emit('close')">
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
-      </header>
+      </div>
+    </template>
 
-      <div class="flex flex-col flex-1 overflow-hidden">
-        <form @submit.prevent="save" class="flex flex-col h-full">
+    <template #sub-header>
+      <!-- Tabs Navigation -->
+      <div class="border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
+        <div class="flex flex-wrap px-4 md:px-6 gap-1 md:gap-6">
+          <a v-for="(tab, index) in tabs" :key="index"
+             @click.prevent="!tab.disabled && (activeTab = index)"
+             :title="tab.disabled ? 'Salve o cliente primeiro para acessar esta aba' : ''"
+             :class="[
+               tab.disabled
+                 ? 'border-b-transparent text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-50'
+                 : activeTab === index 
+                   ? 'border-b-indigo-600 text-slate-900 dark:text-slate-100' 
+                   : 'border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300',
+               'flex items-center justify-center border-b-[3px] px-3 md:px-1 pb-3 pt-4 transition-colors whitespace-nowrap',
+               tab.disabled ? '' : 'cursor-pointer'
+             ]">
+            <p class="text-xs md:text-sm font-bold leading-normal tracking-[0.015em] flex items-center gap-1">
+              {{ tab.label }}
+              <span v-if="tab.disabled" class="material-symbols-outlined text-[14px]">lock</span>
+            </p>
+          </a>
+        </div>
+      </div>
+    </template>
+
+    <form @submit.prevent="save" id="clientForm" class="flex flex-col h-full">
           
-          <!-- Tabs Navigation -->
-          <div class="border-b border-slate-200 dark:border-slate-700 flex-shrink-0">
-            <div class="flex flex-wrap px-4 md:px-6 gap-1 md:gap-6">
-              <a v-for="(tab, index) in tabs" :key="index"
-                 @click.prevent="!tab.disabled && (activeTab = index)"
-                 :title="tab.disabled ? 'Salve o cliente primeiro para acessar esta aba' : ''"
-                 :class="[
-                   tab.disabled
-                     ? 'border-b-transparent text-slate-300 dark:text-slate-600 cursor-not-allowed opacity-50'
-                     : activeTab === index 
-                       ? 'border-b-indigo-600 text-slate-900 dark:text-slate-100' 
-                       : 'border-b-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300',
-                   'flex items-center justify-center border-b-[3px] px-3 md:px-1 pb-3 pt-4 transition-colors whitespace-nowrap',
-                   tab.disabled ? '' : 'cursor-pointer'
-                 ]">
-                <p class="text-xs md:text-sm font-bold leading-normal tracking-[0.015em] flex items-center gap-1">
-                  {{ tab.label }}
-                  <span v-if="tab.disabled" class="material-symbols-outlined text-[14px]">lock</span>
-                </p>
-              </a>
-            </div>
-          </div>
           
           <!-- Tab Content -->
-          <div class="overflow-y-auto p-6 flex-1 bg-transparent dark:bg-slate-900/50">
+          <div class="p-6 flex-1 bg-transparent dark:bg-slate-900/50">
             <!-- Tab 0: Dados Gerais -->
             <div v-show="activeTab === 0" class="pb-32">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -312,17 +315,17 @@
             </div>
           </div>
           
-          <footer class="flex items-center justify-end gap-3 border-t border-slate-200 dark:border-slate-700 px-6 py-4 bg-[var(--color-bg-body)] dark:bg-slate-800 mt-auto flex-shrink-0">
-            <button class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-500" type="button" @click="$emit('close')">
-              Cancelar
-            </button>
-            <button class="px-5 py-2.5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800" type="submit">
-              Salvar
-            </button>
-          </footer>
         </form>
-      </div>
-    </div>
+
+      <template #footer>
+        <button class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-slate-200 dark:focus:ring-slate-500" type="button" @click="$emit('close')">
+          Cancelar
+        </button>
+        <button form="clientForm" class="px-5 py-2.5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800" type="submit">
+          Salvar
+        </button>
+      </template>
+    </BaseModal>
 
     <!-- Modals -->
     <AnamnesisFormModal
@@ -334,11 +337,11 @@
       @close="closeAnamnesisModal"
       @save="onAnamnesisSaved"
     />
-  </div>
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits, onMounted, computed} from 'vue';
+import {ref, onMounted, computed} from 'vue';
+import BaseModal from './common/BaseModal.vue';
 import BaseLookup from './common/BaseLookup.vue';
 import SaleList from './SaleList.vue';
 import AnamnesisList from './anamnesis/AnamnesisList.vue';

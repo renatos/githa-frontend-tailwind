@@ -2,8 +2,7 @@
 import { ref, watch, onMounted, nextTick } from 'vue';
 import { aiService } from '../../services/aiService';
 import { useToast } from 'primevue/usetoast';
-
-import Dialog from 'primevue/dialog';
+import BaseModal from './BaseModal.vue';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 import Skeleton from 'primevue/skeleton';
@@ -156,34 +155,31 @@ const sendMessage = async () => {
       v-tooltip.left="'Assistente de Inteligência Artificial'"
     />
 
-    <!-- Chat Dialog -->
-    <Dialog
-      v-model:visible="isChatVisible"
-      header="Githa AI Assistant"
-      :style="{ width: '400px' }"
-      :breakpoints="{ '600px': '100vw' }"
-      position="bottomright"
-      :modal="false"
-      :draggable="false"
-      class="chat-dialog"
-      :pt="{
-        root: { style: 'margin: 0 20px 80px 0;' }
-      }"
+    <!-- Chat Modal -->
+    <BaseModal
+      :show="isChatVisible"
+      title="Githa AI Assistant"
+      icon="fa-solid fa-sparkles"
+      @close="toggleChat"
+      maxWidth="max-w-md"
+      :bodyPadding="false"
     >
-      <!-- Professional Selector -->
-      <div class="chat-header-actions" v-if="professionals.length > 0">
-          <label class="professional-label">Atuando como (Profissional):</label>
-          <Select 
-            v-model="selectedProfessional" 
-            :options="professionals" 
-            optionLabel="name" 
-            placeholder="Selecione um Profissional" 
-            class="w-full" 
-            :disabled="messages.length > 1 || isLoading || isProfessionalsLoading" 
-          />
-      </div>
+      <template #sub-header>
+        <!-- Professional Selector -->
+        <div class="p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/50" v-if="professionals.length > 0">
+            <label class="text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-2 block">Atuando como (Profissional):</label>
+            <Select 
+              v-model="selectedProfessional" 
+              :options="professionals" 
+              optionLabel="name" 
+              placeholder="Selecione um Profissional" 
+              class="w-full" 
+              :disabled="messages.length > 1 || isLoading || isProfessionalsLoading" 
+            />
+        </div>
+      </template>
 
-      <div class="chat-messages" ref="chatContainer">
+      <div class="chat-messages p-4 flex flex-col gap-4 overflow-y-auto max-h-[50vh]" ref="chatContainer">
         <div 
           v-for="(msg, index) in messages" 
           :key="index"
@@ -229,12 +225,12 @@ const sendMessage = async () => {
       </div>
 
       <template #footer>
-        <div class="chat-input-area">
+        <div class="flex items-center gap-2 w-full">
           <InputText 
             v-model="messageInput" 
             placeholder="Digite sua mensagem..." 
             @keyup.enter="sendMessage"
-            class="chat-input"
+            class="flex-1 rounded-full px-4"
             :disabled="isLoading"
           />
           <Button 
@@ -245,7 +241,7 @@ const sendMessage = async () => {
           />
         </div>
       </template>
-    </Dialog>
+    </BaseModal>
   </div>
 </template>
 
@@ -289,115 +285,5 @@ const sendMessage = async () => {
   .chat-trigger-button:hover {
      transform: translateY(-15px) scale(1.05); /* preserve upward translation on hover */
   }
-
-  :deep(.p-dialog.chat-dialog) {
-      margin: 0 !important;
-      max-height: 90vh;
-      bottom: 70px !important; /* Above bottom nav */
   }
-}
-
-.chat-header-actions {
-  padding: 1rem;
-  border-bottom: 1px solid var(--surface-border);
-  background-color: var(--surface-section);
-}
-
-.professional-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-size: 0.8rem;
-  color: var(--text-color-secondary);
-}
-
-.chat-messages {
-  height: 400px;
-  overflow-y: auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background-color: var(--surface-card);
-  border-radius: 8px;
-}
-
-.message-bubble-wrapper {
-  display: flex;
-  flex-direction: column;
-  max-width: 85%;
-}
-
-.user-message {
-  align-self: flex-end;
-  align-items: flex-end;
-}
-
-.assistant-message {
-  align-self: flex-start;
-  align-items: flex-start;
-}
-
-.message-bubble {
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  line-height: 1.4;
-  word-wrap: break-word;
-}
-
-.user-message .message-bubble {
-  background-color: var(--primary-color);
-  color: var(--primary-color-text);
-  border-bottom-right-radius: 2px;
-}
-
-.assistant-message .message-bubble {
-  background-color: var(--surface-container);
-  color: var(--text-color);
-  border-bottom-left-radius: 2px;
-}
-
-.error-bubble {
-    background-color: var(--red-100) !important;
-    color: var(--red-700) !important;
-    border: 1px solid var(--red-200);
-}
-
-.dark .error-bubble {
-    background-color: rgba(255, 99, 132, 0.2) !important;
-    color: var(--red-300) !important;
-    border: 1px solid rgba(255, 99, 132, 0.4);
-}
-
-.message-time {
-  font-size: 0.7rem;
-  color: var(--text-color-secondary);
-  margin-top: 0.25rem;
-}
-
-.chat-input-area {
-  display: flex;
-  gap: 0.5rem;
-  padding: 0.5rem 0;
-  border-top: 1px solid var(--surface-border);
-  width: 100%;
-}
-
-.chat-input {
-  flex: 1;
-  border-radius: 20px;
-}
-
-.typing-indicator {
-    background-color: transparent !important;
-    padding: 0 0.5rem !important;
-}
-
-/* Base modal overrides for specific chat look */
-:deep(.p-dialog-content) {
-  padding: 0;
-  overflow: hidden;
-}
-:deep(.p-dialog-footer) {
-  padding: 0.5rem 1rem;
-}
 </style>

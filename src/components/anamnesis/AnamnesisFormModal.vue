@@ -1,142 +1,141 @@
 <template>
-  <div class="fixed inset-0 z-[1060] bg-slate-900/50 flex items-start justify-center p-4 backdrop-blur-sm overflow-y-auto" @mousedown.self="$emit('close')">
-    <div class="bg-white dark:bg-slate-800 rounded-xl shadow-xl w-full max-w-[800px] flex flex-col border border-slate-200 dark:border-slate-700 my-4">
-      
-      <!-- Header -->
-      <header class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 flex-shrink-0 rounded-t-xl">
-        <div class="flex items-center gap-3">
-          <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400">description</span>
-          <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">
+  <BaseModal
+    :show="true"
+    @close="$emit('close')"
+    max-width="max-w-3xl"
+    :body-padding="false"
+  >
+    <template #header-content>
+      <div class="flex items-center gap-4 min-w-0">
+        <span class="material-symbols-outlined text-[24px] shrink-0 text-indigo-600 dark:text-indigo-400">description</span>
+        <div class="min-w-0">
+          <h2 class="text-lg font-bold leading-tight tracking-[-0.015em] m-0 text-slate-900 dark:text-slate-100 truncate">
             Ficha de Anamnese{{ typeLabel }}
           </h2>
         </div>
-        <button @click="$emit('close')" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors focus:outline-none rounded-md p-1">
-          <span class="material-symbols-outlined text-[20px]">close</span>
-        </button>
-      </header>
-
-      <!-- Body -->
-      <div class="p-6 overflow-y-auto max-h-[calc(100vh-200px)] bg-slate-50 dark:bg-slate-900/50 flex flex-col gap-6">
-        
-        <!-- Readonly Banner -->
-        <div v-if="readonly" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-700 text-sky-700 dark:text-sky-300">
-          <span class="material-symbols-outlined text-[20px]">info</span>
-          <span class="text-sm font-medium">Ficha de Anamnese — Apenas Leitura</span>
-        </div>
-
-        <!-- Type Selector (Only on Creation) -->
-        <label v-if="!entity?.id" class="flex flex-col">
-          <p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">
-            Tipo de Anamnese <span class="text-red-500">*</span>
-          </p>
-          <select 
-            v-model="selectedType" 
-            class="form-select flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-12 px-4 py-3 text-base font-normal leading-normal transition-colors"
-            :disabled="readonly"
-            required
-          >
-            <option :value="null">Selecione o tipo de anamnese</option>
-            <option 
-              v-for="type in anamnesisTypes" 
-              :key="type.name" 
-              :value="type.name"
-            >
-              {{ type.description }}
-            </option>
-          </select>
-        </label>
-
-        <div v-if="selectedType" class="flex flex-col gap-6">
-          <!-- Common Fields -->
-          <label class="flex flex-col">
-            <p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">Data do Atendimento</p>
-            <input 
-              type="date" 
-              v-model="form.attendanceDate" 
-              class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-12 px-4 py-3 text-base font-normal leading-normal transition-colors"
-              :disabled="readonly"
-              required 
-            />
-          </label>
-
-          <hr class="border-slate-200 dark:border-slate-700" />
-
-          <!-- Dynamic Form Component Based on Type -->
-          <component 
-            v-if="currentForm" 
-            :is="currentForm" 
-            v-model="form" 
-            :readonly="readonly"
-          />
-
-          <hr class="border-slate-200 dark:border-slate-700" />
-
-          <!-- Common Observables -->
-          <label class="flex flex-col">
-            <p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">Observações da Profissional</p>
-            <textarea 
-              v-model="form.professionalNotes" 
-              class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 px-4 py-3 text-base font-normal leading-normal transition-colors resize-y min-h-[80px]"
-              rows="3" 
-              :disabled="readonly"
-              placeholder="Adicione notas visíveis apenas para a clínica..."
-            ></textarea>
-          </label>
-
-          <!-- Consents -->
-          <div class="p-4 rounded-lg bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col gap-4">
-            <label class="flex items-start gap-3 cursor-pointer">
-              <input 
-                type="checkbox" 
-                v-model="form.consentGranted" 
-                :disabled="readonly"
-                required
-                class="mt-1 h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 focus:ring-indigo-600"
-              />
-              <span class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                Declaro que as informações fornecidas são verdadeiras e estou ciente dos procedimentos, riscos e cuidados necessários. <span class="text-red-500">*</span>
-              </span>
-            </label>
-            <label class="flex items-start gap-3 cursor-pointer">
-              <input 
-                type="checkbox" 
-                v-model="form.photoAuthorizationGranted" 
-                :disabled="readonly"
-                class="mt-1 h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 focus:ring-indigo-600"
-              />
-              <span class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                Autorizo registro fotográfico e divulgação nas mídias sociais.
-              </span>
-            </label>
-          </div>
-        </div>
+      </div>
+    </template>
+    <!-- Body Content -->
+    <div class="p-6 bg-slate-50 dark:bg-slate-900/50 flex flex-col gap-6">
+      <!-- Readonly Banner -->
+      <div v-if="readonly" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-700 text-sky-700 dark:text-sky-300">
+        <span class="material-symbols-outlined text-[20px]">info</span>
+        <span class="text-sm font-medium">Ficha de Anamnese — Apenas Leitura</span>
       </div>
 
-      <!-- Footer -->
-      <footer class="flex items-center justify-end gap-3 border-t border-slate-200 dark:border-slate-700 px-6 py-4 bg-white dark:bg-slate-800 rounded-b-xl flex-shrink-0">
-        <button 
-          type="button" 
-          class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors"
-          @click="$emit('close')"
+      <!-- Type Selector (Only on Creation) -->
+      <label v-if="!entity?.id" class="flex flex-col">
+        <p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">
+          Tipo de Anamnese <span class="text-red-500">*</span>
+        </p>
+        <select 
+          v-model="selectedType" 
+          class="form-select flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-12 px-4 py-3 text-base font-normal leading-normal transition-colors"
+          :disabled="readonly"
+          required
         >
-          {{ readonly ? 'Fechar' : 'Cancelar' }}
-        </button>
-        <button 
-          v-if="!readonly" 
-          type="button" 
-          class="px-5 py-2.5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed"
-          :disabled="!canSave"
-          @click="save"
-        >
-          Salvar
-        </button>
-      </footer>
+          <option :value="null">Selecione o tipo de anamnese</option>
+          <option 
+            v-for="type in anamnesisTypes" 
+            :key="type.name" 
+            :value="type.name"
+          >
+            {{ type.description }}
+          </option>
+        </select>
+      </label>
+
+      <div v-if="selectedType" class="flex flex-col gap-6">
+        <!-- Common Fields -->
+        <label class="flex flex-col">
+          <p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">Data do Atendimento</p>
+          <input 
+            type="date" 
+            v-model="form.attendanceDate" 
+            class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 h-12 px-4 py-3 text-base font-normal leading-normal transition-colors"
+            :disabled="readonly"
+            required 
+          />
+        </label>
+
+        <hr class="border-slate-200 dark:border-slate-700" />
+
+        <!-- Dynamic Form Component Based on Type -->
+        <component 
+          v-if="currentForm" 
+          :is="currentForm" 
+          v-model="form" 
+          :readonly="readonly"
+        />
+
+        <hr class="border-slate-200 dark:border-slate-700" />
+
+        <!-- Common Observables -->
+        <label class="flex flex-col">
+          <p class="text-slate-900 dark:text-slate-100 text-sm font-medium leading-normal pb-2">Observações da Profissional</p>
+          <textarea 
+            v-model="form.professionalNotes" 
+            class="form-input flex w-full rounded-lg text-slate-900 dark:text-slate-100 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600 px-4 py-3 text-base font-normal leading-normal transition-colors resize-y min-h-[80px]"
+            rows="3" 
+            :disabled="readonly"
+            placeholder="Adicione notas visíveis apenas para a clínica..."
+          ></textarea>
+        </label>
+
+        <!-- Consents -->
+        <div class="p-4 rounded-lg bg-slate-100/50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 flex flex-col gap-4">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input 
+              type="checkbox" 
+              v-model="form.consentGranted" 
+              :disabled="readonly"
+              required
+              class="mt-1 h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 focus:ring-indigo-600"
+            />
+            <span class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              Declaro que as informações fornecidas são verdadeiras e estou ciente dos procedimentos, riscos e cuidados necessários. <span class="text-red-500">*</span>
+            </span>
+          </label>
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input 
+              type="checkbox" 
+              v-model="form.photoAuthorizationGranted" 
+              :disabled="readonly"
+              class="mt-1 h-4 w-4 rounded border-slate-300 dark:border-slate-600 text-indigo-600 focus:ring-indigo-600"
+            />
+            <span class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              Autorizo registro fotográfico e divulgação nas mídias sociais.
+            </span>
+          </label>
+        </div>
+      </div>
     </div>
-  </div>
+
+    <!-- Footer -->
+    <template #footer>
+      <button 
+        type="button" 
+        class="px-5 py-2.5 rounded-lg text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-600 font-medium text-sm transition-colors"
+        @click="$emit('close')"
+      >
+        {{ readonly ? 'Fechar' : 'Cancelar' }}
+      </button>
+      <button 
+        v-if="!readonly" 
+        type="button" 
+        class="px-5 py-2.5 rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed"
+        :disabled="!canSave"
+        @click="save"
+      >
+        Salvar
+      </button>
+    </template>
+  </BaseModal>
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted, defineProps, defineEmits } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
+import BaseModal from '../common/BaseModal.vue';
 import FacialAnamnesisForm from './FacialAnamnesisForm.vue';
 import EyelashExtensionAnamnesisForm from './EyelashExtensionAnamnesisForm.vue';
 import MicropigmentationAnamnesisForm from './MicropigmentationAnamnesisForm.vue';
