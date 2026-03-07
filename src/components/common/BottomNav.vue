@@ -12,7 +12,7 @@
       <i class="pi pi-users"></i>
       <span>Clientes</span>
     </router-link>
-    <router-link to="/financials" class="nav-item" active-class="active" :class="{ 'active': $route.path.startsWith('/financials') || $route.path.startsWith('/accounts') || $route.path.startsWith('/payment-methods') || $route.path.startsWith('/account-groups') }">
+    <router-link to="/financials" class="nav-item" active-class="active" :class="{ 'active': $route.path.startsWith('/financials') || $route.path.startsWith('/payment-methods') || $route.path.startsWith('/account-groups') }">
       <i class="pi pi-wallet"></i>
       <span>Financeiro</span>
     </router-link>
